@@ -12,7 +12,9 @@ class AuthService{
                 email:data.email
                 }});
             if(user){
+                user.password = user.password.replace(/^\$2y(.+)$/i, '$2a$1');
                 const validPassword = await bcrypt.compare(data.password, user.password);
+                console.log(data.password, user.password, validPassword)
                 if(validPassword){
                     let current = new Date(); //'Mar 11 2015' current.getTime() = 1426060964567
                     let followingDay = current.getTime() + Number.parseInt(APIToken.EXPIRED_MS_TOKEN) // + 1 day in ms
@@ -46,6 +48,7 @@ class AuthService{
             else{
                 const salt = await bcrypt.genSalt(10);
                 data.password = await bcrypt.hash(data.password, salt);
+                data.password = data.password.replace(/^\$2a$1(.+)$/i, '$2y');
                 const item = userModel.create(data);
                 return (item)? Response.success(201, item) : Response.error(500);
             }
