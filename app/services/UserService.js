@@ -7,7 +7,7 @@ class UserService{
     excludePost = ['remember_token', 'deleted_at', 'created_at', 'updated_at', 'password', 'id'];
 
     async getAll(token){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key:'USER', action:'read'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
@@ -21,7 +21,7 @@ class UserService{
     }
     async get(token, req){
         console.log(token);
-        if(!await PermissionService.havePermission({user_id: token.id, module_key:'USER', action:'read'})){
+        if(!await PermissionService.havePermission({user_id: token.id, module_key:'users', action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
@@ -43,7 +43,7 @@ class UserService{
     }
 
     async update(token, id, req){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key:'USER', action:'update'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'update'})){
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
@@ -60,7 +60,7 @@ class UserService{
         }
     }
     async delete(token, id){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key:'USER', action:'delete'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'delete'})){
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
