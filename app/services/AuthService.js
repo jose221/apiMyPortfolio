@@ -14,7 +14,6 @@ class AuthService{
             if(user){
                 user.password = user.password.replace(/^\$2y(.+)$/i, '$2a$1');
                 const validPassword = await bcrypt.compare(data.password, user.password);
-                console.log(data.password, user.password, validPassword)
                 if(validPassword){
                     let current = new Date(); //'Mar 11 2015' current.getTime() = 1426060964567
                     let followingDay = current.getTime() + Number.parseInt(APIToken.EXPIRED_MS_TOKEN) // + 1 day in ms
@@ -90,6 +89,31 @@ class AuthService{
         return res;
 
     }
+    async authGetToken(request){
+        try{
+            const user = await userModel.findOne({
+                attributes: ['email','password', 'remember_token'],//eliminar password
+                where:{
+                    email:request.email
+                }});
+            if(user) {
+                user.password = user.password.replace(/^\$2y(.+)$/i, '$2a$1');
+                const validPassword = await bcrypt.compare(request.password, user.password);
+                if (validPassword) {
+                    let token = await this.verifyToken(user.dataValues.remember_token);
+                    if(user.dataValues.remember_token && token){
+                        return Response.success(200,{expired_token: user.dataValues.remember_token });
+                    }else{
+                        token = await this.authLogin(request);
+                        return Response.success(200,{expired_token: token.data.token });
+                    }
+                }
+            }
+            return Response.error( 400, null, "usuario y/o contraseña incorrecta");
+        }catch (e) {
+            return Response.error(500, e)
+        }
+    }
     async authRemoveToken(id){
         let res = false;
         try{
@@ -117,8 +141,7 @@ class AuthService{
                 attributes:['remember_token']
             });
             if(user){
-                if(user.remember_token != token) return Response.error(500, null, 'Token no valido');
-                else res = true;
+                if(user.remember_token == token) res = true;
             }
         }catch (e){
             console.log(e);

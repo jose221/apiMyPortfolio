@@ -73,5 +73,24 @@ class AuthController {
             return res.status(500).json(Response.error(500, e))
         }
     }
+    /**
+     *@method getToken metodo encargado de devolver el token necesario
+     * **/
+    async getToken(req, res){
+        const {error} = this.paramsLogin.validate(req.body);
+        if (error) {
+            return res.status(400).json(Response.error(400, error.details, error.details[0].message))
+        }
+        try{
+            let item = await AuthService.authGetToken(req.body);
+            if(item.response != 'error'){
+                return res.header('auth-token', item.data.token).json(item);
+            }else{
+                return res.status(400).json(item)
+            }
+        }catch (e) {
+            return res.status(500).json(Response.error(500, e))
+        }
+    }
 }
 module.exports = new AuthController();

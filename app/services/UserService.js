@@ -20,7 +20,6 @@ class UserService{
         }
     }
     async get(token, req){
-        console.log(token);
         if(!await PermissionService.havePermission({user_id: token.id, module_key:'users', action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }

@@ -94,6 +94,10 @@ User.init({
         type: DataTypes.STRING(1000),
         allowNull: true
     },
+    api_token: {
+        type: DataTypes.STRING(1000),
+        allowNull: true
+    },
 }, {
     tableName: 'users',
     //timestamps: false,
