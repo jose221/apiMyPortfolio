@@ -3,6 +3,7 @@ require('express-group-routes');
 const bodyparser = require('body-parser');
 const APIAuth = require('./routes/api-auth');
 const APIUser = require('./routes/api-user');
+const APIProfessionaleExperience = require('./routes/api-professional-experience');
 const cors = require('cors');
 const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
 var app = express()
@@ -22,6 +23,7 @@ const PREFIX_ROUTE = '/api/admin';
 //rutas admin
 app.use(PREFIX_ROUTE, APIAuth);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIUser);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIProfessionaleExperience);
 
 
 
