@@ -5,10 +5,10 @@ const APIAuth = require('./routes/api-auth');
 const APIUser = require('./routes/api-user');
 const APIProfessionaleExperience = require('./routes/api-professional-experience');
 const APIknowledges = require('./routes/api-Knowledge');
+const APIUploadFile = require('./routes/api-upload-file');
 const cors = require('cors');
 const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
 var app = express()
-
 
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
@@ -28,13 +28,18 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIProfessionaleExperience);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIknowledges);
 
 
-//https://stackoverflow.com/questions/16015548/how-to-send-multipart-form-data-request-using-postman
-//https://www.cristalab.com/tutoriales/como-subir-archivos-con-express.js-c113231l/
 
-//https://levelup.gitconnected.com/async-js-crash-course-callbacks-promises-async-await-2e5f11b67dc4
-//https://programacion.net/articulo/como_subir_un_fichero_mediante_ajax_en_node_js_2111
 
-console.log("http://localhost:"+port)
+
+/******* upload file *****************/
+/******* upload file *****************/
+var multipart = require('connect-multiparty');
+app.use(multipart());
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIUploadFile);
+app.use('/src', express.static(__dirname + '/public'));
+
+
+
 // iniciamos nuestro servidor
  app.listen(port)
 
