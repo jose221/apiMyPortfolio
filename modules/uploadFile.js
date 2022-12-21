@@ -3,35 +3,49 @@ const fs = require("fs");
 const PermissionService = require("../app/services/PermissionService");
 const Response = require("./response");
 
+const tinify = require("tinify");
+tinify.key = "dtBm0CNJ59JK5jyr2vvLgP4gyptlRgnD";
+
 class UploadFile{
     current_module = 'files';
-    async save(token, files, opt){
-        if(!await PermissionService.havePermission({user_id: token.id, module_key: this.current_module, action:'create'})){
-            return {
-                code:500,
-                message:"No tienes acceso a esta API"
+    async save(token, file, opt){
+        if(token){
+            if(!await PermissionService.havePermission({user_id: token.id, module_key: this.current_module, action:'create'})){
+                return {
+                    code:500,
+                    message:"No tienes acceso a esta API"
+                }
             }
         }
-        let path = files.file.path;
+        let path = file.path;
         let ultr = opt.module || 'uploads';
-        let dir = `${uuidv4()}-${files.file.originalFilename}`;
+        let dir = `${uuidv4()}-${file.originalFilename}`;
         let newPath = "./public/"+ultr+"/";
+
+
         if(!fs.existsSync(newPath)) fs.mkdirSync(newPath,{recursive:true});
 
         let url = "/src/"+ultr+"/"+dir;
-        let is = fs.createReadStream(path)
-        let os = fs.createWriteStream(newPath+dir)
+        if(opt.type == 'image'){
+            let source = await tinify.fromFile(path);
+            await source.toFile(newPath+dir);
+        }else{
+            let is = fs.createReadStream(path)
+            let os = fs.createWriteStream(newPath+dir)
 
-        is.pipe(os)
+            is.pipe(os)
 
-        is.on('end', function() {
-            fs.unlinkSync(path)
-        })
-        return{
+            is.on('end', function() {
+                fs.unlinkSync(path)
+            });
+        }
+
+        let res = {
             code:201,
             url:url,
             message:"Se subió el archivo correctamente."
         }
+        return (opt.returnUrl) ? res.url : res;
 
     }
     async remove(url, token){

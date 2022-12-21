@@ -2,6 +2,8 @@ const { body, validationResult } = require('express-validator');
 const Joi = require('joi');
 const Response = require('../../modules/response');
 const ProfessionalExperienceService = require("../services/ProfessionalExperienceService");
+const KnowledgeService = require("../services/KnowledgeService");
+const UploadFile = require("../../modules/uploadFile");
 
 class ProfessionalExperienceController {
     paramsCreate = Joi.object({
@@ -14,7 +16,7 @@ class ProfessionalExperienceController {
         description_en: Joi.string().required(),
         country_es: Joi.string().max(255).required(),
         country_en: Joi.string().max(255).required(),
-        image_path: Joi.string().required(),
+        image_path: Joi.string(),
         user_id: Joi.number().required(),
     });
 
@@ -28,7 +30,7 @@ class ProfessionalExperienceController {
         description_en: Joi.string().required(),
         country_es: Joi.string().max(255).required(),
         country_en: Joi.string().max(255).required(),
-        image_path: Joi.string().required(),
+        image_path: Joi.string(),
     });
 
     async get(req, res, token){
@@ -46,6 +48,21 @@ class ProfessionalExperienceController {
         }
 
     }
+    async create(req, res, token){
+        const {error} = this.paramsCreate.validate(req.body);
+        let item = null;
+        if (error) {
+            return res.status(400).json(Response.error(400, error.details, error.details[0].message))
+        }
+        try{
+            if(req.files.image_path) req.body.image_path = await UploadFile.save(token,req.files.image_path, {module:"professionalExperiences", returnUrl:true, type:'image'} )
+            item = await ProfessionalExperienceService.create(token, req.body);
+            return res.status(200).json(item);
+        }
+        catch (e) {
+            return res.status(500).json(Response.error(500, e))
+        }
+    }
 
     async update(req, res, token){
 
@@ -56,6 +73,7 @@ class ProfessionalExperienceController {
         }
         try{
             if(req.params.id){
+                if(req.files.image_path) req.body.image_path = await UploadFile.save(token,req.files.image_path, {module:"professionalExperiences", returnUrl:true, type:'image'} )
                 item = await ProfessionalExperienceService.update(token, req.params.id, req.body);
                 return res.status(200).json(item);
             }else{

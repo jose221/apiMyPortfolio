@@ -1,6 +1,9 @@
 const Joi = require('joi');
 const AuthService = require('../services/AuthService');
 const Response = require('../../modules/response');
+
+const UploadFile = require('../../modules/uploadFile');
+
 class AuthController {
     //validation
     paramsLogin = Joi.object({
@@ -19,11 +22,11 @@ class AuthController {
         password: Joi.string().min(6).max(255).required(),
         country_es: Joi.string().max(255),
         country_en: Joi.string().max(255),
-        header_image_path: Joi.string().max(255),
-        my_perfil: Joi.string().max(255),
-        logo: Joi.string().max(255),
-        slogan_es: Joi.string().max(255),
-        slogan_en: Joi.string().max(255),
+        header_image_path: Joi.string(),
+        my_perfil: Joi.string(),
+        logo: Joi.string(),
+        slogan_es: Joi.string(),
+        slogan_en: Joi.string(),
         header_text_es: Joi.string().max(255),
         header_text_en: Joi.string().max(255),
         remember_token: Joi.string(),
@@ -48,11 +51,19 @@ class AuthController {
 
     }
     async register(req, res){
+
         const {error} = this.paramsRegister.validate(req.body);
         if (error) {
             return res.status(400).json(Response.error(400, error.details, error.details[0].message))
         }
         try{
+
+            if(req.files.header_image_path) req.body.header_image_path = await UploadFile.save("",req.files.header_image_path, {module:"users", returnUrl:true, type:'image'} )
+            if(req.files.my_perfil) req.body.my_perfil = await UploadFile.save("",req.files.my_perfil, {module:"users", returnUrl:true, type:'image'} )
+            if(req.files.logo) req.body.logo = await UploadFile.save("",req.files.logo, {module:"users", returnUrl:true, type:'image'} )
+            if(req.files.slogan_es) req.body.slogan_es = await UploadFile.save("",req.files.slogan_es, {module:"users", returnUrl:true, type:'image'} )
+            if(req.files.slogan_en) req.body.slogan_en = await UploadFile.save("",req.files.slogan_en, {module:"users", returnUrl:true, type:'image'} )
+
             let item = await AuthService.authRegister(req.body);
             return res.json(item);
         }catch (e) {

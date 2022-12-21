@@ -28,6 +28,7 @@
     "multer": "1.1.0",
     "mysql2": "^2.3.3",
     "sequelize": "^6.19.0",
+    "tinify": "^1.7.1",
     "unique-random": "^3.0.0",
     "uuid": "^9.0.0"
   }

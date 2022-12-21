@@ -1,38 +1,32 @@
 const { body, validationResult } = require('express-validator');
 const Joi = require('joi');
 const Response = require('../../modules/response');
-const KnowledgeService = require("../services/KnowledgeService");
+const KnowledgesAbilitiesService = require("../services/KnowledgesAbilitiesService");
 const UploadFile = require("../../modules/uploadFile");
-const UserService = require("../services/UserService");
 
-class KnowledgeController {
+class KnowledgesAbilitiesController {
     paramsCreate = Joi.object({
         title_es: Joi.string().max(255).required(),
         title_en: Joi.string().max(255).required(),
-        icon_path: Joi.string(),
         description_es: Joi.string().required(),
         description_en: Joi.string().required(),
-        important: Joi.boolean(),
-        user_id: Joi.number().required(),
+        knowledges_id: Joi.number().required(),
     });
 
     paramsUpdate = Joi.object({
         title_es: Joi.string().max(255).required(),
         title_en: Joi.string().max(255).required(),
-        icon_path: Joi.string(),
         description_es: Joi.string().required(),
         description_en: Joi.string().required(),
-        important: Joi.boolean(),
-        user_id: Joi.number().required(),
     });
 
     async get(req, res, token){
         let item = null;
         try{
             if(req.body.id){
-                item = await KnowledgeService.get(token, req.body);
+                item = await KnowledgesAbilitiesService.get(token, req.body);
             }else{
-                item = await KnowledgeService.getAll(token);
+                item = await KnowledgesAbilitiesService.getAll(token);
             }
 
             return res.status(200).json(item);
@@ -40,6 +34,20 @@ class KnowledgeController {
             return res.status(500).json(Response.error(500, e))
         }
 
+    }
+    async create(req, res, token){
+        const {error} = this.paramsCreate.validate(req.body);
+        let item = null;
+        if (error) {
+            return res.status(400).json(Response.error(400, error.details, error.details[0].message))
+        }
+        try{
+            item = await KnowledgesAbilitiesService.create(token, req.body);
+            return res.status(200).json(item);
+        }
+        catch (e) {
+            return res.status(500).json(Response.error(500, e))
+        }
     }
 
     async update(req, res, token){
@@ -51,8 +59,7 @@ class KnowledgeController {
         }
         try{
             if(req.params.id){
-                if(req.files.icon_path) req.body.icon_path = await UploadFile.save(token,req.files.icon_path, {module:"knowledges", returnUrl:true, type:'image'} )
-                item = await KnowledgeService.update(token, req.params.id, req.body);
+                item = await KnowledgesAbilitiesService.update(token, req.params.id, req.body);
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))
@@ -62,28 +69,11 @@ class KnowledgeController {
             return res.status(500).json(Response.error(500, e))
         }
     }
-
-    async create(req, res, token){
-        const {error} = this.paramsCreate.validate(req.body);
-        let item = null;
-        if (error) {
-            return res.status(400).json(Response.error(400, error.details, error.details[0].message))
-        }
-        try{
-            if(req.files.icon_path) req.body.icon_path = await UploadFile.save(token,req.files.icon_path, {module:"knowledges", returnUrl:true, type:'image'} )
-            item = await KnowledgeService.create(token, req.body);
-            return res.status(200).json(item);
-        }
-        catch (e) {
-            return res.status(500).json(Response.error(500, e))
-        }
-    }
-
     async delete(req, res, token){
         let item = null;
         try{
             if(req.params.id){
-                item = await KnowledgeService.delete(token, req.params.id);
+                item = await KnowledgesAbilitiesService.delete(token, req.params.id);
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))
@@ -94,4 +84,4 @@ class KnowledgeController {
         }
     }
 }
-module.exports = new KnowledgeController();
+module.exports = new KnowledgesAbilitiesController();

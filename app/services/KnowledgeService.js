@@ -62,6 +62,21 @@ class KnowledgeService {
             return Response.error(500, e)
         }
     }
+
+    async create(token, req){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key: this.current_module, action:'create'})){
+            return Response.error(500, null, "No tienes acceso a esta API");
+        }
+        try{
+            req = await DBHelper.excludeAttributes(this.excludePost, req);
+            const res = await model.create(req)
+            if(res)  return Response.success(200,res);
+            else return Response.error(500, null, 'No se pudo crear')
+        }catch (e){
+            return Response.error(500, e)
+        }
+    }
+
     async delete(token, id){
         if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'delete'})){
             return Response.error(500, null, "No tienes acceso a esta API");

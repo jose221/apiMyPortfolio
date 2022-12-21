@@ -6,9 +6,15 @@ const APIUser = require('./routes/api-user');
 const APIProfessionaleExperience = require('./routes/api-professional-experience');
 const APIknowledges = require('./routes/api-Knowledge');
 const APIUploadFile = require('./routes/api-upload-file');
+const APIKnowledgesAbilities = require('./routes/api-knowledges-abilities');
+const APIMyContacts = require('./routes/api-my-contacts');
+const APIPersonalProjects = require('./routes/api-personal-projects');
+
+
 const cors = require('cors');
 const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
 var app = express()
+var multipart = require('connect-multiparty');
 
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
@@ -19,6 +25,7 @@ var corsOptions = {
  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));
+app.use(multipart());
 const PREFIX_ROUTE = '/api/admin';
 
 //rutas admin
@@ -26,6 +33,9 @@ app.use(PREFIX_ROUTE, APIAuth);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIUser);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIProfessionaleExperience);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIknowledges);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIKnowledgesAbilities);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIMyContacts);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIPersonalProjects);
 
 
 
@@ -33,8 +43,6 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIknowledges);
 
 /******* upload file *****************/
 /******* upload file *****************/
-var multipart = require('connect-multiparty');
-app.use(multipart());
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIUploadFile);
 app.use('/src', express.static(__dirname + '/public'));
 

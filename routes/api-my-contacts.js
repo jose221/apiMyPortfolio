@@ -1,8 +1,8 @@
-const Controller = require("../app/controllers/KnowledgeController");
+const Controller = require("../app/controllers/MyContactsController");
 const router = require('express').Router();
 const AuthService = require('../app/services/AuthService');
 
-let path = "/knowledges";
+let path = "/my-contacts";
 
 router.get(`${path}`, async (req, res) => Controller.get(req, res, await AuthService.getTokenDecrypt(req.header('auth-token'))));
 router.post(`${path}`, async (req, res) => Controller.create(req, res, await AuthService.getTokenDecrypt(req.header('auth-token'))));

@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 const Joi = require('joi');
 const UserService = require('../services/UserService');
 const Response = require('../../modules/response');
+const UploadFile = require("../../modules/uploadFile");
 class UserController {
     paramsCreate = Joi.object({
         name: Joi.string().max(255).required(),
@@ -37,11 +38,11 @@ class UserController {
         email: Joi.string().max(255).required().email(),
         country_es: Joi.string().max(255),
         country_en: Joi.string().max(255),
-        header_image_path: Joi.string().max(255),
-        my_perfil: Joi.string().max(255),
-        logo: Joi.string().max(255),
-        slogan_es: Joi.string().max(255),
-        slogan_en: Joi.string().max(255),
+        header_image_path: Joi.string(),
+        my_perfil: Joi.string(),
+        logo: Joi.string(),
+        slogan_es: Joi.string(),
+        slogan_en: Joi.string(),
         header_text_es: Joi.string().max(255),
         header_text_en: Joi.string().max(255),
         cv: Joi.number(),
@@ -65,6 +66,13 @@ class UserController {
     }
 
     async update(req, res, token){
+
+        if(req.files.header_image_path) req.body.header_image_path = await UploadFile.save("",req.files.header_image_path, {module:"users", returnUrl:true, type:'image'} )
+        if(req.files.my_perfil) req.body.my_perfil = await UploadFile.save("",req.files.my_perfil, {module:"users", returnUrl:true, type:'image'} )
+        if(req.files.logo) req.body.logo = await UploadFile.save("",req.files.logo, {module:"users", returnUrl:true, type:'image'} )
+        if(req.files.slogan_es) req.body.slogan_es = await UploadFile.save("",req.files.slogan_es, {module:"users", returnUrl:true, type:'image'} )
+        if(req.files.slogan_en) req.body.slogan_en = await UploadFile.save("",req.files.slogan_en, {module:"users", returnUrl:true, type:'image'} )
+
         const {error} = this.paramsUpdate.validate(req.body);
         let item = null;
         if (error) {
@@ -86,6 +94,7 @@ class UserController {
         let item = null;
         try{
             if(req.params.id){
+
                 item = await UserService.delete(token, req.params.id);
                 return res.status(200).json(item);
             }else{
