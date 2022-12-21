@@ -9,6 +9,9 @@ const APIUploadFile = require('./routes/api-upload-file');
 const APIKnowledgesAbilities = require('./routes/api-knowledges-abilities');
 const APIMyContacts = require('./routes/api-my-contacts');
 const APIPersonalProjects = require('./routes/api-personal-projects');
+const APIPortfolio = require('./routes/api-portfolios');
+const APIPortfolioCategories = require('./routes/api-portfolio-categories');
+const APIStudies = require('./routes/api-studies');
 
 
 const cors = require('cors');
@@ -36,6 +39,9 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIknowledges);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIKnowledgesAbilities);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIMyContacts);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIPersonalProjects);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIPortfolio);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIPortfolioCategories);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIStudies);
 
 
 
