@@ -1,17 +1,16 @@
-
+const PermissionService = require("./PermissionService");
 const Response = require("../../modules/response");
-const model = require("../models/Permission");
+const model = require("../models/Message");
 const DBHelper = require("../helpers/DBHelper");
-const User = require("../models/User");
-const Module = require("../models/Module");
-class PermissionService {
+
+class MessagesService {
 
     exclude = ['deleted_at', 'created_at', 'updated_at'];
     excludePost = ['deleted_at', 'created_at', 'updated_at', 'id'];
-    current_module = 'permissions';
+    current_module = 'messages';
 
     async getAll(token){
-        if(! await this.havePermission({user_id:token.id, module_key:this.current_module, action:'read'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key:this.current_module, action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
@@ -25,7 +24,7 @@ class PermissionService {
     }
 
     async get(token, req){
-        if(!await this.havePermission({user_id: token.id, module_key: this.current_module, action:'read'})){
+        if(!await PermissionService.havePermission({user_id: token.id, module_key: this.current_module, action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
@@ -47,7 +46,7 @@ class PermissionService {
     }
 
     async update(token, id, req){
-        if(! await this.havePermission({user_id:token.id, module_key: this.current_module, action:'update'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key: this.current_module, action:'update'})){
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
@@ -65,7 +64,7 @@ class PermissionService {
     }
 
     async create(token, req){
-        if(! await this.havePermission({user_id:token.id, module_key: this.current_module, action:'create'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key: this.current_module, action:'create'})){
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
@@ -79,7 +78,7 @@ class PermissionService {
     }
 
     async delete(token, id){
-        if(! await this.havePermission({user_id:token.id, module_key:'users', action:'delete'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'delete'})){
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
@@ -94,33 +93,6 @@ class PermissionService {
             return Response.error(500, e)
         }
     }
-    async havePermission({user_id, module_key, action}){
-        let conditions ={};
-        if(user_id && module_key && action){
-            const  query_user = await User.findOne({
-                attributes:['id', 'role_id'],
-                where:{id: user_id}
-            });
-            const query_module = await Module.findOne({
-                attributes:['id', 'key'],
-                where:{key: module_key}
-            });
-            if(query_module && query_user){
-                conditions = {role_id: query_user.role_id, module_id: query_module.id}
-                conditions['can_'+action] = true;
-            }else{
-                conditions = {role_id: 999, module_id: 999}
-            }
-            const $permission =await model.findOne({
-                where: conditions
-            });
-            return await ($permission) ? true : false;
-        }else {
-            return false;
-        }
-
-    }
 }
 
-module.exports = new PermissionService();
-
+module.exports = new MessagesService();

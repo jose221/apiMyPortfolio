@@ -12,6 +12,9 @@ const APIPersonalProjects = require('./routes/api-personal-projects');
 const APIPortfolio = require('./routes/api-portfolios');
 const APIPortfolioCategories = require('./routes/api-portfolio-categories');
 const APIStudies = require('./routes/api-studies');
+const APIMessages = require('./routes/api-messages');
+const APIModules = require('./routes/api-modules');
+const APIPermissions = require('./routes/api-permissions');
 
 
 const cors = require('cors');
@@ -42,6 +45,9 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIPersonalProjects);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIPortfolio);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIPortfolioCategories);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIStudies);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIMessages);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIModules);
+app.use(PREFIX_ROUTE,validateTokenAdmin, APIPermissions);
 
 
 
