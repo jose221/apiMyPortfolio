@@ -17,9 +17,13 @@ MyContact.init({
         allowNull: true
     },
     url_path: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(500),
         allowNull: true
     },
+        icon_path: {
+            type: DataTypes.STRING(500),
+            allowNull: true
+        }
     },
 {
     modelName: 'MyContact',

@@ -49,14 +49,35 @@ class UserController {
         role_id: Joi.number(),
     });
 
-    async get(req, res, token){
+    async get(req, res, token, isAdmin=true){
         let item = null;
         try{
-            if(req.body.id){
+            if(req.body.id || !isAdmin){
+                req.body.id = token.id;
                 item = await UserService.get(token, req.body);
             }else{
                 item = await UserService.getAll(token);
             }
+
+            return res.status(200).json(item);
+        }catch (e) {
+            return res.status(500).json(Response.error(500, e))
+        }
+
+    }
+    async getByLang(req, res, token, isAdmin=true){
+        let item = null;
+        try{
+            req.body.id = token.id;
+            item = await UserService.get(token, req.body);
+
+            item.data.nationality = await item.data[`nationality_${req.params.language}`];
+            item.data.description = await item.data[`description_${req.params.language}`];
+            item.data.country = await item.data[`country_${req.params.language}`];
+
+            delete item.data[`nationality_${req.params.language}`];
+            delete item.data[`description_${req.params.language}`];
+            delete item.data[`country_${req.params.language}`];
 
             return res.status(200).json(item);
         }catch (e) {

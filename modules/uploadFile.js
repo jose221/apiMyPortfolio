@@ -25,7 +25,7 @@ class UploadFile{
 
         if(!fs.existsSync(newPath)) fs.mkdirSync(newPath,{recursive:true});
 
-        let url = "/src/"+ultr+"/"+dir;
+        let url = "/storage/"+ultr+"/"+dir;
         if(opt.type == 'image'){
             let source = await tinify.fromFile(path);
             await source.toFile(newPath+dir);
@@ -56,7 +56,7 @@ class UploadFile{
             }
         }
         let text = "Se eliminó el archivo correctamente.";
-        url = url.replace('/src/', './public/');
+        url = url.replace('/storage/', './public/');
         if(fs.existsSync(url)) fs.unlinkSync(url);
         else text = "Archivo no encontrado."
         return{

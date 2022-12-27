@@ -33,6 +33,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(multipart());
 const PREFIX_ROUTE = '/api/admin';
+const PREFIX_ROUTE_PUBLIC = '/api';
 
 //rutas admin
 app.use(PREFIX_ROUTE, APIAuth);
@@ -49,14 +50,16 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIMessages);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIModules);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIPermissions);
 
-
-
-
-
 /******* upload file *****************/
 /******* upload file *****************/
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIUploadFile);
-app.use('/src', express.static(__dirname + '/public'));
+app.use('/storage', express.static(__dirname + '/public'));
+
+
+/** api publicas **/
+const APIMyPortfolio= require('./routes/portfolio/api-portfolio');
+app.use(PREFIX_ROUTE_PUBLIC,validateTokenAdmin, APIMyPortfolio);
+
 
 
 

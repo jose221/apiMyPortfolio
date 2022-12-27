@@ -1,6 +1,7 @@
 const PermissionService = require("./PermissionService");
 const Response = require("../../modules/response");
 const model = require("../models/PortfolioCategory");
+const fkModel = require("../models/Portfolio");
 const DBHelper = require("../helpers/DBHelper");
 
 class PortfolioCategoriesService {
@@ -37,7 +38,20 @@ class PortfolioCategoriesService {
                         id:req.id
                     }});
                 return Response.success(200,res);
-            }else{
+            }
+            else if (req.user_id){
+                const res = await model.findAll({
+                    include:[{model: fkModel}],
+                    attributes: {
+                        exclude:this.exclude
+                    }
+                    ,where:{
+                        //user_id:req.user_id
+                        //id:req.user_id
+                    }});
+                return Response.success(200,res);
+            }
+            else{
                 return Response.error(500, null, "Es necesaría un id")
             }
         }catch (e){

@@ -2,6 +2,7 @@
 const Joi = require('joi');
 const Response = require('../../modules/response');
 const MyContactsService = require("../services/MyContactsService");
+const UserService = require("../services/UserService");
 
 class MyContactsController {
     paramsCreate = Joi.object({
@@ -19,10 +20,11 @@ class MyContactsController {
         icon_path: Joi.string().max(255).required(),
     });
 
-    async get(req, res, token){
+    async get(req, res, token, isAdmin=true ){
         let item = null;
         try{
-            if(req.body.id){
+            if(req.body.id || !isAdmin){
+                req.body.user_id = token.id;
                 item = await MyContactsService.get(token, req.body);
             }else{
                 item = await MyContactsService.getAll(token);

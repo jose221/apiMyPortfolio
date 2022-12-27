@@ -58,6 +58,9 @@ Portfolio.init({
 Portfolio.belongsTo(PortfolioCategory,{
     foreignKey: 'portfolio_categories_id'
 });
+PortfolioCategory.hasMany(Portfolio,{
+    foreignKey: 'portfolio_categories_id'
+});
 PortfolioCategory.hasOne(Portfolio, {
     foreignKey: 'portfolio_categories_id'
 });

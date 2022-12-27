@@ -21,10 +21,11 @@ class PortfolioCategoriesController {
         description_en: Joi.string().required(),
     });
 
-    async get(req, res, token){
+    async get(req, res, token, isAdmin=true){
         let item = null;
         try{
-            if(req.body.id){
+            if(req.body.id || !isAdmin){
+                req.body.user_id = token.id;
                 item = await Service.get(token, req.body);
             }else{
                 item = await Service.getAll(token);
