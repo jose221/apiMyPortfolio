@@ -38,7 +38,7 @@ class ProfessionalExperienceService{
                 return Response.success(200,res);
             }
             else if (req.user_id){
-                const res = await model.findAll({
+                let res = await model.findAll({
                     attributes: {
                         exclude:this.exclude
                     }
@@ -46,6 +46,10 @@ class ProfessionalExperienceService{
                         user_id: req.user_id
                         //id:req.user_id
                     }});
+                res = res.map(item => {
+                    item.portfolio = JSON.parse(item.portfolio);
+                    return item;
+                });
                 return Response.success(200,res);
             }
             else{
