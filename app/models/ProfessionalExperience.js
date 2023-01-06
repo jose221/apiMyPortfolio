@@ -64,6 +64,10 @@ ProfessionalExperience.init({
 ProfessionalExperience.belongsTo(User,{
     foreignKey: 'user_id'
 });
+
+User.hasMany(ProfessionalExperience, {
+    foreignKey: 'user_id'
+});
 User.hasOne(ProfessionalExperience, {
     foreignKey: 'user_id'
 });

@@ -40,6 +40,9 @@ Study.init({
 Study.belongsTo(User,{
     foreignKey: 'user_id'
 });
+User.hasMany(Study, {
+    foreignKey: 'user_id'
+});
 User.hasOne(Study, {
     foreignKey: 'user_id'
 });

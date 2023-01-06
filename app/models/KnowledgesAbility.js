@@ -38,6 +38,9 @@ KnowledgesAbility.init({
 KnowledgesAbility.belongsTo(KnowLedge,{
     foreignKey: 'knowledges_id'
 });
+KnowLedge.hasMany(KnowledgesAbility, {
+    foreignKey: 'knowledges_id'
+});
 KnowLedge.hasOne(KnowledgesAbility, {
     foreignKey: 'knowledges_id'
 });

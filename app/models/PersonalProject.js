@@ -51,6 +51,10 @@ PersonalProject.init({
 PersonalProject.belongsTo(User,{
     foreignKey: 'user_id'
 });
+
+User.hasMany(PersonalProject, {
+    foreignKey: 'user_id'
+});
 User.hasOne(PersonalProject, {
     foreignKey: 'user_id'
 });

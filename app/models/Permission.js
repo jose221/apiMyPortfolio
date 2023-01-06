@@ -49,6 +49,9 @@ Role.hasOne(Permission, {
 Permission.belongsTo(Module,{
     foreignKey: 'module_id'
 });
+Module.hasMany(Permission, {
+    foreignKey: 'module_id'
+});
 Module.hasOne(Permission, {
     foreignKey: 'module_id'
 });

@@ -46,6 +46,9 @@ KnowLedge.init({
 KnowLedge.belongsTo(User,{
     foreignKey: 'user_id'
 });
+User.hasMany(KnowLedge, {
+    foreignKey: 'user_id'
+});
 User.hasOne(KnowLedge, {
     foreignKey: 'user_id'
 });

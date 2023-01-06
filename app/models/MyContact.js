@@ -36,6 +36,9 @@ MyContact.init({
 MyContact.belongsTo(User,{
     foreignKey: 'user_id'
 });
+User.hasMany(MyContact, {
+    foreignKey: 'user_id'
+});
 User.hasOne(MyContact, {
     foreignKey: 'user_id'
 });

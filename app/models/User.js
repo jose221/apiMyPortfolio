@@ -127,6 +127,9 @@ HistoryCurriculumVitae.hasOne(User, {
 User.belongsTo(Role,{
     foreignKey: 'role_id'
 });
+Role.hasMany(User, {
+    foreignKey: 'role_id'
+});
 Role.hasOne(User, {
     foreignKey: 'role_id'
 });
