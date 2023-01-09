@@ -14,10 +14,10 @@ class MyContactsController {
     });
 
     paramsUpdate = Joi.object({
-        name_es: Joi.string().max(255).required(),
-        name_en: Joi.string().max(255).required(),
-        url_path: Joi.string().max(255).required(),
-        icon_path: Joi.string().max(255).required(),
+        name_es: Joi.string().max(255),
+        name_en: Joi.string().max(255),
+        url_path: Joi.string().max(255),
+        icon_path: Joi.string().max(255),
     });
 
     async get(req, res, token, isAdmin=true ){
@@ -76,7 +76,11 @@ class MyContactsController {
             if(req.params.id){
                 item = await MyContactsService.delete(token, req.params.id);
                 return res.status(200).json(item);
-            }else{
+            }else if(req.body.ids){
+                item = await MyContactsService.delete(token, req.body.ids.split(','));
+                return res.status(200).json(item);
+            }
+            else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))
             }
         }
