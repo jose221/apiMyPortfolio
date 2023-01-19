@@ -4,6 +4,7 @@ const Response = require('../../modules/response');
 const ProfessionalExperienceService = require("../services/ProfessionalExperienceService");
 const KnowledgeService = require("../services/KnowledgeService");
 const UploadFile = require("../../modules/uploadFile");
+const Service = require("../services/ModulesService");
 
 class ProfessionalExperienceController {
     paramsCreate = Joi.object({
@@ -21,22 +22,23 @@ class ProfessionalExperienceController {
     });
 
     paramsUpdate = Joi.object({
-        company: Joi.string().max(255).required(),
-        job_es: Joi.string().max(255).required(),
-        job_en: Joi.string().max(255).required(),
+        company: Joi.string().max(255),
+        job_es: Joi.string().max(255),
+        job_en: Joi.string().max(255),
         date_start: Joi.date(),
         date_end: Joi.date(),
-        description_es: Joi.string().required(),
-        description_en: Joi.string().required(),
-        country_es: Joi.string().max(255).required(),
-        country_en: Joi.string().max(255).required(),
+        description_es: Joi.string(),
+        description_en: Joi.string(),
+        country_es: Joi.string().max(255),
+        country_en: Joi.string().max(255),
         image_path: Joi.string(),
     });
 
     async get(req, res, token, isAdmin=true){
         let item = null;
         try{
-            if(req.body.id || !isAdmin){
+            if(req.body.id || req.params.id){
+                if(req.params.id) req.body.id = req.params.id;
                 req.body.user_id = token.id;
                 item = await ProfessionalExperienceService.get(token, req.body);
             }else{
@@ -90,6 +92,9 @@ class ProfessionalExperienceController {
         try{
             if(req.params.id){
                 item = await ProfessionalExperienceService.delete(token, req.params.id);
+                return res.status(200).json(item);
+            }else if(req.body.ids){
+                item = await ProfessionalExperienceService.delete(token, req.body.ids.split(','));
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))

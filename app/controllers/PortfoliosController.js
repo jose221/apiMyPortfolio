@@ -19,12 +19,12 @@ class PortfoliosController {
     });
 
     paramsUpdate = Joi.object({
-        code: Joi.string().max(255).required(),
+        code: Joi.string().max(255),
         icon_path: Joi.string(),
-        title_es: Joi.string().max(255).required(),
-        title_en: Joi.string().max(255).required(),
-        description_es: Joi.string().required(),
-        description_en: Joi.string().required(),
+        title_es: Joi.string().max(255),
+        title_en: Joi.string().max(255),
+        description_es: Joi.string(),
+        description_en: Joi.string(),
         years_experience: Joi.number(),
         knowledge_level: Joi.number(),
         portfolio_categories_id: Joi.number()
@@ -33,7 +33,8 @@ class PortfoliosController {
     async get(req, res, token){
         let item = null;
         try{
-            if(req.body.id){
+            if(req.body.id || req.params.id){
+                if(req.params.id) req.body.id = req.params.id;
                 item = await Service.get(token, req.body);
             }else{
                 item = await Service.getAll(token);
@@ -88,6 +89,9 @@ class PortfoliosController {
         try{
             if(req.params.id){
                 item = await Service.delete(token, req.params.id);
+                return res.status(200).json(item);
+            }else if(req.body.ids){
+                item = await Service.delete(token, req.body.ids.split(','));
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))

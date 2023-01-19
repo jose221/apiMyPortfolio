@@ -18,19 +18,20 @@ class PersonalProjectsController {
     });
 
     paramsUpdate = Joi.object({
-        name_es: Joi.string().max(255).required(),
-        name_en: Joi.string().max(255).required(),
-        date_upload: Joi.string().max(255).required(),
-        link: Joi.string().max(255).required(),
+        name_es: Joi.string().max(255),
+        name_en: Joi.string().max(255),
+        date_upload: Joi.string().max(255),
+        link: Joi.string().max(255),
         image_path: Joi.string(),
-        description_es: Joi.string().required(),
-        description_en: Joi.string().required(),
+        description_es: Joi.string(),
+        description_en: Joi.string(),
     });
 
     async get(req, res, token, isAdmin=true){
         let item = null;
         try{
-            if(req.body.id || !isAdmin){
+            if(req.body.id || req.params.id){
+                if(req.params.id) req.body.id = req.params.id;
                 req.body.user_id = token.id;
                 item = await Service.get(token, req.body);
             }else{
@@ -86,6 +87,9 @@ class PersonalProjectsController {
         try{
             if(req.params.id){
                 item = await Service.delete(token, req.params.id);
+                return res.status(200).json(item);
+            }else if(req.body.ids){
+                item = await Service.delete(token, req.body.ids.split(','));
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))

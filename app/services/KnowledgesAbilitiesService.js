@@ -9,13 +9,14 @@ class KnowledgesAbilitiesService {
     excludePost = ['deleted_at', 'created_at', 'updated_at', 'id'];
     current_module = 'knowledges_abilities';
 
-    async getAll(token){
+    async getAll(token, params={}){
         if(! await PermissionService.havePermission({user_id:token.id, module_key:this.current_module, action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
             const res = await model.findAll({attributes: {
-                    exclude:this.exclude
+                    exclude:this.exclude,
+                    where:params
                 }});
             return Response.success(200,res);
         }catch (e){

@@ -2,6 +2,7 @@ const PermissionService = require("./PermissionService");
 const Response = require("../../modules/response");
 const model = require("../models/KnowLedge");
 const DBHelper = require("../helpers/DBHelper");
+const fkModel = require("../models/KnowledgesAbility");
 
 class KnowledgeService {
 
@@ -30,8 +31,9 @@ class KnowledgeService {
         try{
             if(req.id){
                 const res = await model.findOne({
+                    include:[{model: fkModel}],
                     attributes: {
-                        exclude:this.exclude
+                        exclude:this.exclude,
                     }
                     ,where:{
                         id:req.id

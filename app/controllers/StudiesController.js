@@ -3,6 +3,7 @@ const Joi = require('joi');
 const Response = require('../../modules/response');
 const Service = require("../services/StudiesService");
 const UploadFile = require("../../modules/uploadFile");
+const ProfessionalExperienceService = require("../services/ProfessionalExperienceService");
 
 
 class StudiesController {
@@ -16,18 +17,19 @@ class StudiesController {
     });
 
     paramsUpdate = Joi.object({
-        caerrer_es: Joi.string().max(255).required(),
-        caerrer_en: Joi.string().max(255).required(),
-        school_es: Joi.string().max(255).required(),
-        school_en: Joi.string().max(255).required(),
-        folio: Joi.string().max(100).required(),
+        caerrer_es: Joi.string().max(255),
+        caerrer_en: Joi.string().max(255),
+        school_es: Joi.string().max(255),
+        school_en: Joi.string().max(255),
+        folio: Joi.string().max(100),
         user_id: Joi.number()
     });
 
     async get(req, res, token){
         let item = null;
         try{
-            if(req.body.id){
+            if(req.body.id || req.params.id){
+                if(req.params.id) req.body.id = req.params.id;
                 item = await Service.get(token, req.body);
             }else{
                 item = await Service.getAll(token);
@@ -80,6 +82,9 @@ class StudiesController {
         try{
             if(req.params.id){
                 item = await Service.delete(token, req.params.id);
+                return res.status(200).json(item);
+            }else if(req.body.ids){
+                item = await Service.delete(token, req.body.ids.split(','));
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))

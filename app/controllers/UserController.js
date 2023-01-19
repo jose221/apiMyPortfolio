@@ -3,6 +3,7 @@ const Joi = require('joi');
 const UserService = require('../services/UserService');
 const Response = require('../../modules/response');
 const UploadFile = require("../../modules/uploadFile");
+const Service = require("../services/StudiesService");
 class UserController {
     paramsCreate = Joi.object({
         name: Joi.string().max(255).required(),
@@ -28,14 +29,14 @@ class UserController {
         role_id: Joi.number(),
     });
     paramsUpdate = Joi.object({
-        name: Joi.string().max(255).required(),
+        name: Joi.string().max(255),
         age: Joi.number(),
         date_birthday: Joi.date(),
         nationality_es: Joi.string().max(255),
         nationality_en: Joi.string().max(255),
         description_es: Joi.string(),
         description_en: Joi.string(),
-        email: Joi.string().max(255).required().email(),
+        email: Joi.string().max(255).email(),
         country_es: Joi.string().max(255),
         country_en: Joi.string().max(255),
         header_image_path: Joi.string(),
@@ -52,7 +53,8 @@ class UserController {
     async get(req, res, token, isAdmin=true){
         let item = null;
         try{
-            if(req.body.id || !isAdmin){
+            if(req.body.id || req.params.id){
+                if(req.params.id) req.body.id = req.params.id;
                 req.body.id = token.id;
                 item = await UserService.get(token, req.body);
             }else{
@@ -117,6 +119,9 @@ class UserController {
             if(req.params.id){
 
                 item = await UserService.delete(token, req.params.id);
+                return res.status(200).json(item);
+            }else if(req.body.ids){
+                item = await UserService.delete(token, req.body.ids.split(','));
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))

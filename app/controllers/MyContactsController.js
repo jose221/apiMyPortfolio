@@ -23,7 +23,8 @@ class MyContactsController {
     async get(req, res, token, isAdmin=true ){
         let item = null;
         try{
-            if(req.body.id || !isAdmin){
+            if(req.body.id || req.params.id){
+                if(req.params.id) req.body.id = req.params.id;
                 req.body.user_id = token.id;
                 item = await MyContactsService.get(token, req.body);
             }else{
