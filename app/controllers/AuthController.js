@@ -103,5 +103,21 @@ class AuthController {
             return res.status(500).json(Response.error(500, e))
         }
     }
+
+    async verifyToken(req, res){
+        try {
+            let token = req.body.token;
+            if (!token) {
+                return res.status(500).json(Response.error(500, null, "Es necesario ingresar el token"));
+            }
+            let verifyToken = await AuthService.verifyToken(token);
+            return res.status(200).json(Response.success(200, {
+                access: verifyToken
+            }));
+        }
+        catch (e){
+            return res.status(500).json(Response.error(500, e))
+        }
+    }
 }
 module.exports = new AuthController();
