@@ -20,12 +20,14 @@ class UserController {
         header_image_path: Joi.string().max(255),
         my_perfil: Joi.string().max(255),
         logo: Joi.string().max(255),
+        avatar: Joi.string(),
         slogan_es: Joi.string().max(255),
         slogan_en: Joi.string().max(255),
         header_text_es: Joi.string().max(255),
         header_text_en: Joi.string().max(255),
         remember_token: Joi.string(),
         cv: Joi.number(),
+        api_token: Joi.string(),
         role_id: Joi.number(),
     });
     paramsUpdate = Joi.object({
@@ -42,6 +44,8 @@ class UserController {
         header_image_path: Joi.string(),
         my_perfil: Joi.string(),
         logo: Joi.string(),
+        avatar: Joi.string(),
+        api_token: Joi.string(),
         slogan_es: Joi.string(),
         slogan_en: Joi.string(),
         header_text_es: Joi.string().max(255),
@@ -51,6 +55,7 @@ class UserController {
     });
 
     async get(req, res, token, isAdmin=true){
+        //return res.status(200).json(req.get('host'));
         let item = null;
         try{
             if(req.body.id || req.params.id){
@@ -125,6 +130,23 @@ class UserController {
                 return res.status(200).json(item);
             }else{
                 return res.status(500).json(Response.error(500, null, "Es necesario agregar el id"))
+            }
+        }
+        catch (e) {
+            return res.status(500).json(Response.error(500, e))
+        }
+    }
+    async showUser(req, res, token){
+        let item = null;
+        if (req.body.cv) {
+            return res.status(400).json(Response.error(400, null, "Tienes que agregar el id del curriculum."))
+        }
+        try{
+            if(req.params.id){
+                item = await UserService.update(token, req.params.id, req.body);
+                return res.status(200).json(item);
+            }else{
+                return res.status(500).json(Response.error(500, null, "Es necesario agregar el id del usuario"))
             }
         }
         catch (e) {

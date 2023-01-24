@@ -15,6 +15,7 @@ const APIStudies = require('./routes/api-studies');
 const APIMessages = require('./routes/api-messages');
 const APIModules = require('./routes/api-modules');
 const APIPermissions = require('./routes/api-permissions');
+const ApiHistoryCV = require('./routes/api-history-cv');
 
 
 const cors = require('cors');
@@ -49,6 +50,7 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIStudies);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIMessages);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIModules);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIPermissions);
+app.use(PREFIX_ROUTE,validateTokenAdmin, ApiHistoryCV);
 
 /******* upload file *****************/
 /******* upload file *****************/
