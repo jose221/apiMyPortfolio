@@ -64,6 +64,12 @@ class ProfessionalExperienceService{
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
+            if(typeof (req.portfolio) == 'array'){
+                req.portfolio = await req.portfolio.map((item)=>{
+                    return JSON.stringify(item);
+                })
+                req.portfolio = req.portfolio.toString();
+            };
             req = await DBHelper.excludeAttributes(this.excludePost, req);
             const res = await model.create(req)
             if(res)  return Response.success(200,res);
@@ -77,6 +83,7 @@ class ProfessionalExperienceService{
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{
+            if(typeof (req.portfolio) == 'array') JSON.stringify(req.portfolio);
             req = await DBHelper.excludeAttributes(this.excludePost, req);
             const res = await model.update(req, {
                 where: {

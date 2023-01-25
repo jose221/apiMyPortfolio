@@ -19,6 +19,7 @@ class ProfessionalExperienceController {
         country_en: Joi.string().max(255).required(),
         image_path: Joi.string(),
         user_id: Joi.number().required(),
+        portfolio: Joi.any().required()
     });
 
     paramsUpdate = Joi.object({
@@ -32,6 +33,7 @@ class ProfessionalExperienceController {
         country_es: Joi.string().max(255),
         country_en: Joi.string().max(255),
         image_path: Joi.string(),
+        portfolio: Joi.any()
     });
 
     async get(req, res, token, isAdmin=true){
