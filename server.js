@@ -33,6 +33,9 @@ var corsOptions = {
 }
 app.use(cors(corsOptions));
 app.use(multipart());
+app.get('/', function(req, res) {
+ res.json({ mensaje: '¡Hola Mundo!' })
+})
 const PREFIX_ROUTE = '/api/admin';
 const PREFIX_ROUTE_PUBLIC = '/api';
 
