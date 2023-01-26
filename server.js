@@ -36,18 +36,20 @@ app.use(multipart());
 app.get('/', function(req, res) {
  res.json({ mensaje: '¡Hola Mundo!' })
 })
-app.get('/test', function(req, res) {
+app.get('/test', async function(req, res) {
  const { Sequelize } = require('sequelize');
  const database = require('./config/database');
  let connection = new Sequelize(database.DB_DATABASE, database.DB_USERNAME, database.DB_PASSWORD, {
   host: database.DB_HOST,
   dialect: database.DB_CONNECTION
  });
- connection.authenticate().then(res=>{
-  res.json({ mensaje: 'Connection has been established successfully.' })
- }).catch(error=>{
-  res.json({ mensaje: 'Unable to connect to the database:' })
- });
+ try{
+  let con = await connection.authenticate();
+  res.json({ mensaje: 'Connection has been established successfully.', data:con })
+ }
+catch (e){
+ res.json({ mensaje: 'Unable to connect to the database:' })
+}
 })
 const PREFIX_ROUTE = '/api/admin';
 const PREFIX_ROUTE_PUBLIC = '/api';
