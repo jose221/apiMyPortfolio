@@ -38,7 +38,7 @@ app.get('/', function(req, res) {
 })
 app.get('/test', function(req, res) {
  const { Sequelize } = require('sequelize');
- const database = require('../config/database');
+ const database = require('./config/database');
  let connection = new Sequelize(database.DB_DATABASE, database.DB_USERNAME, database.DB_PASSWORD, {
   host: database.DB_HOST,
   dialect: database.DB_CONNECTION
