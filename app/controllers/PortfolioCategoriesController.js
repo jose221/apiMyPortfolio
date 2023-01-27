@@ -11,6 +11,7 @@ class PortfolioCategoriesController {
         title_en: Joi.string().max(255).required(),
         description_es: Joi.string().required(),
         description_en: Joi.string().required(),
+        user_id: Joi.number(),
     });
 
     paramsUpdate = Joi.object({

@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const  db = require('../../modules/db')
+const User = require("./User");
 
 class PortfolioCategory extends Model{}
 PortfolioCategory.init({
@@ -37,6 +38,16 @@ PortfolioCategory.init({
         createdAt: 'created_at',
     }
 );
+PortfolioCategory.belongsTo(User,{
+    foreignKey: 'user_id'
+});
+
+User.hasMany(PortfolioCategory, {
+    foreignKey: 'user_id'
+});
+User.hasOne(PortfolioCategory, {
+    foreignKey: 'user_id'
+});
 
 
 module.exports = PortfolioCategory;
