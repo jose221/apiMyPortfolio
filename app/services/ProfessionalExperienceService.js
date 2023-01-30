@@ -14,9 +14,13 @@ class ProfessionalExperienceService{
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
-            const res = await model.findAll({attributes: {
+            let res = await model.findAll({attributes: {
                     exclude:this.exclude
                 }});
+            res = res.map(item => {
+                item.portfolio = JSON.parse(item.portfolio);
+                return item;
+            });
             return Response.success(200,res);
         }catch (e){
             return Response.error(500, e)
@@ -28,13 +32,17 @@ class ProfessionalExperienceService{
         }
         try{
             if(req.id){
-                const res = await model.findOne({
+                let res = await model.findOne({
                     attributes: {
                         exclude:this.exclude
                     }
                     ,where:{
                         id:req.id
                     }});
+                res = res.map(item => {
+                    item.portfolio = JSON.parse(item.portfolio);
+                    return item;
+                });
                 return Response.success(200,res);
             }
             else if (req.user_id){
