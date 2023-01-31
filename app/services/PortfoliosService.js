@@ -9,14 +9,17 @@ class PortfoliosService {
     excludePost = ['deleted_at', 'created_at', 'updated_at', 'id'];
     current_module = 'portfolios';
 
-    async getAll(token){
+    async getAll(token, req ={}){
         if(! await PermissionService.havePermission({user_id:token.id, module_key:this.current_module, action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
+            if(await PermissionService.isAdministrator(token.id)) req.user_id = token.id;
             const res = await model.findAll({attributes: {
                     exclude:this.exclude
-                }});
+                },
+                where:req
+            });
             return Response.success(200,res);
         }catch (e){
             return Response.error(500, e)

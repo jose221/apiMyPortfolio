@@ -120,6 +120,13 @@ class PermissionService {
         }
 
     }
+    async isAdministrator(user_id){
+        const  query_user = await User.findOne({
+            attributes:['id', 'role_id'],
+            where:{id: user_id}
+        });
+        return (query_user.role_id == 1);
+    }
 }
 
 module.exports = new PermissionService();

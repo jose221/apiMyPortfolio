@@ -9,14 +9,17 @@ class ProfessionalExperienceService{
     excludePost = ['deleted_at', 'created_at', 'updated_at', 'id'];
     current_module = 'prefessional_experiences';
 
-    async getAll(token){
+    async getAll(token, req= {}){
         if(! await PermissionService.havePermission({user_id:token.id, module_key:this.current_module, action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
+            if(await PermissionService.isAdministrator(token.id)) req.user_id = token.id;
             let res = await model.findAll({attributes: {
                     exclude:this.exclude
-                }});
+                },
+                where: req
+            });
             res = res.map(item => {
                 item.portfolio = JSON.parse(item.portfolio);
                 return item;
@@ -39,10 +42,7 @@ class ProfessionalExperienceService{
                     ,where:{
                         id:req.id
                     }});
-                res = res.map(item => {
-                    item.portfolio = JSON.parse(item.portfolio);
-                    return item;
-                });
+                res.portfolio = JSON.parse(res.portfolio);
                 return Response.success(200,res);
             }
             else if (req.user_id){

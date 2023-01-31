@@ -63,7 +63,11 @@ class UserController {
                 req.body.id = token.id;
                 item = await UserService.get(token, req.body);
             }else{
-                item = await UserService.getAll(token);
+                if(isAdmin){
+                    item = await UserService.getAll(token);
+                }else{
+                    item = await UserService.get(token, {id: token.id});
+                }
             }
 
             return res.status(200).json(item);

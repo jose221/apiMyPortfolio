@@ -44,7 +44,11 @@ class ProfessionalExperienceController {
                 req.body.user_id = token.id;
                 item = await ProfessionalExperienceService.get(token, req.body);
             }else{
-                item = await ProfessionalExperienceService.getAll(token);
+                if(isAdmin){
+                    item = await ProfessionalExperienceService.getAll(token);
+                }else{
+                    item = await ProfessionalExperienceService.getAll(token, {user_id: token.id});
+                }
             }
 
             return res.status(200).json(item);

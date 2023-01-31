@@ -2,18 +2,23 @@ const User = require('../models/User');
 const PermissionService = require('../services/PermissionService');
 const Response = require("../../modules/response");
 const DBHelper = require("../helpers/DBHelper")
+const fkModel = require("../models/HistoryCurriculumVitae");
 class UserService{
     exclude = ['remember_token', 'deleted_at', 'password', 'email_verified_at'];
     excludePost = ['remember_token', 'deleted_at', 'created_at', 'updated_at', 'password', 'id'];
 
-    async getAll(token){
+    async getAll(token, req = {}){
         if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'read'})){
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
-            const res = await User.findAll({attributes: {
-                exclude:this.exclude
-            }});
+            const res = await User.findAll({
+                include:[{model: fkModel}],
+                attributes: {
+                exclude:this.exclude,
+                },
+                where: req
+            });
             return Response.success(200,res);
         }catch (e){
             return Response.error(500, e)
@@ -26,6 +31,7 @@ class UserService{
         try{
             if(req.id){
                 const res = await User.findOne({
+                    include:[{model: fkModel}],
                     attributes: {
                         exclude:this.exclude
                     }

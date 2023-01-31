@@ -15,7 +15,7 @@ class PortfolioCategoriesService {
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
-            req.user_id = token.id;
+            if(await PermissionService.isAdministrator(token.id)) req.user_id = token.id;
             const res = await model.findAll({
                 include:[{model: fkModel}],
                 attributes: {
@@ -36,6 +36,7 @@ class PortfolioCategoriesService {
         try{
             if(req.id){
                 const res = await model.findOne({
+                    include:[{model: fkModel}],
                     attributes: {
                         exclude:this.exclude
                     }
