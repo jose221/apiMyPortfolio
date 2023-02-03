@@ -28,6 +28,7 @@ class MessagesController {
         try{
             if(req.body.id || req.params.id){
                 if(req.params.id) req.body.id = req.params.id;
+                req.body.user_id = token.id;
                 item = await Service.get(token, req.body);
             }else{
                 item = await Service.getAll(token);
