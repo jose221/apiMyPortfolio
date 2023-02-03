@@ -14,7 +14,7 @@ class MessagesService {
             return Response.error(500, null, "No tienes acceso a esta API")
         }
         try{
-            if(await PermissionService.isAdministrator(token.id)) req.user_id = token.id;
+            //if(await PermissionService.isAdministrator(token.id)) req.user_id = token.id;
             const res = await model.findAll({attributes: {
                     exclude:this.exclude
                 },
