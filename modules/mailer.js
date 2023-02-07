@@ -1,54 +1,44 @@
 const nodemailer = require('nodemailer');
 const {response} = require("express");
+const confMailer = require('../config/mail');
 class Mailer{
-    #transporter;
+    transporter = null;
     constructor() {
-        this.#init;
+        this.init;
     }
-    #init(){
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
+    init(){
+        //this.transporter.verify().then(console.log).catch(console.error);
+    }
+    async send(params,attachments = []){
+        this.transporter = nodemailer.createTransport({
+            host: confMailer.MAIL_HOST,
+            port: confMailer.MAIL_HOST,
             auth: {
-                user: '',
-                pass: '',
+                user: confMailer.MAIL_USERNAME,
+                pass: confMailer.MAIL_PASSWORD,
             },
         });
-        transporter.verify().then(console.log).catch(console.error);
-        this.#transporter = transporter;
-    }
-    async send(attachments = []){
         let response = {
             status: "success",
             data:null,
             isSended:true
         }
         try {
-            response.data = await this.#transporter.sendMail({
+            response.data = await this.transporter.sendMail({
                 from: '"Herandro technologies" <herandro.tech>', // sender address
-                to: "email al cual vas a enviar", // list of receivers
-                subject: "asunto del correo electrónico", // Subject line
-                text: "texto plano del correo", // plain text body
+                to: params.to, // list of receivers
+                subject: params.subject, // Subject line
+                text:   params.text, // plain text body
                 html: "añade aquí la versión html del correo electrónico", // html body
-                attachments: [
-                    {
-                        filename: 'fb.png',
-                        path: './public/images/fb.png',
-                        cid: 'fb' //same cid value as in the html img src
-                    },
-                    {
-                        filename: 'ig.png',
-                        path: './public/images/ig.png',
-                        cid: 'ig' //same cid value as in the html img src
-                    },
-                ],
+                ... attachments
             })
         }catch (e){
             response.status = "error";
             response.isSended = false;
+            response.data = e;
             console.log(e);
         }
         return response;
     }
 }
-module.exports = Mailer;
+module.exports = new Mailer();

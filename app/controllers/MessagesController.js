@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 const Joi = require('joi');
 const Response = require('../../modules/response');
 const Service = require("../services/MessagesService");
+const Mailer = require("../../modules/mailer");
 const KnowledgesAbilitiesService = require("../services/KnowledgesAbilitiesService");
 
 class MessagesController {
@@ -68,7 +69,17 @@ class MessagesController {
             return res.status(400).json(Response.error(400, error.details, error.details[0].message))
         }
         try{
-            item = await Service.create(token, req.body);
+            let message = await Mailer.send({
+                to: req.body.email,
+                subject: "Nuevo correo desde el portafolio web",
+                text: "has recibido un nuevo correo de " + req.body.name,
+                html: req.body.message
+            });
+            if(message.isSended){
+                item = await Service.create(token, req.body);
+            }else{
+                item = message
+            }
             return res.status(200).json(item);
         }
         catch (e) {
