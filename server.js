@@ -20,7 +20,8 @@ const ApiHistoryCV = require('./routes/api-history-cv');
 
 const cors = require('cors');
 const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
-var app = express()
+var app = express();
+var ws = require('express-ws')(app);
 var multipart = require('connect-multiparty');
 
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -82,6 +83,18 @@ const {Sequelize} = require("sequelize");
 const database = require("./config/database");
 app.use(PREFIX_ROUTE_PUBLIC,validateTokenAdmin, APIMyPortfolio);
 
+const HerandroDataController = require("./app/controllers/HerandroDataController");
+
+app.ws('/test-socket', (socket, req) => {
+ socket.on('message', (data)=> {
+  data  = JSON.parse(data);
+  if(!data.id){
+   HerandroDataController.init(socket, data)
+  }else{
+   
+  }
+ })
+});
 
 
 

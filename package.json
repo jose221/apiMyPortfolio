@@ -11,7 +11,8 @@
   "author": "jose angel",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.14.0"
+    "eslint": "^8.14.0",
+    "socket.io": "^4.6.0"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -22,6 +23,7 @@
     "express": "^4.18.0",
     "express-group-routes": "^1.1.0",
     "express-validator": "^6.14.0",
+    "express-ws": "^5.0.2",
     "jimp": "^0.16.2",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
@@ -32,6 +34,8 @@
     "sequelize": "^6.19.0",
     "tinify": "^1.7.1",
     "unique-random": "^3.0.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "websocket": "^1.0.34",
+    "ws": "^8.12.0"
   }
 }
