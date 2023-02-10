@@ -79,8 +79,6 @@ app.use('/storage', express.static(__dirname + '/public'));
 
 /** api publicas **/
 const APIMyPortfolio= require('./routes/portfolio/api-portfolio');
-const {Sequelize} = require("sequelize");
-const database = require("./config/database");
 app.use(PREFIX_ROUTE_PUBLIC,validateTokenAdmin, APIMyPortfolio);
 
 const HerandroDataController = require("./app/controllers/HerandroDataController");
@@ -91,7 +89,7 @@ app.ws('/test-socket', (socket, req) => {
   if(!data.id){
    HerandroDataController.init(socket, data)
   }else{
-   
+   HerandroDataController.action(socket, data)
   }
  })
 });
