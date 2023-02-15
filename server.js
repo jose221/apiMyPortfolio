@@ -26,6 +26,7 @@ var multipart = require('connect-multiparty');
 
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
+app.set('trust proxy', true);
 
  var port = process.env.PORT || 8080
 var corsOptions = {
