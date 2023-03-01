@@ -80,7 +80,7 @@ app.use('/storage', express.static(__dirname + '/public'));
 
 /** api publicas **/
 const APIMyPortfolio= require('./routes/portfolio/api-portfolio');
-app.use(PREFIX_ROUTE_PUBLIC,validateTokenAdmin, APIMyPortfolio);
+app.use(PREFIX_ROUTE_PUBLIC, APIMyPortfolio);
 
 const HerandroDataController = require("./app/controllers/HerandroDataController");
 
@@ -88,9 +88,9 @@ app.ws('/test-socket', (socket, req) => {
  socket.on('message', (data)=> {
   data  = JSON.parse(data);
   if(!data.id){
-   HerandroDataController.init(socket, data)
+   HerandroDataController.init(socket, req, data)
   }else{
-   HerandroDataController.action(socket, data)
+   HerandroDataController.action(socket, req, data)
   }
  })
 });

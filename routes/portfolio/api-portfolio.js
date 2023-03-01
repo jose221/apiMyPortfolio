@@ -4,6 +4,7 @@ const MyKnowledgesController = require("../../app/controllers/KnowledgeControlle
 const MyPortfolioCategoriesController = require("../../app/controllers/PortfolioCategoriesController");
 const MyPersonalProjectsController = require("../../app/controllers/PersonalProjectsController");
 const MyProfessionalExperienceController = require("../../app/controllers/ProfessionalExperienceController");
+const HerandroDataController = require("../../app/controllers/HerandroDataController");
 
 const router = require('express').Router();
 const AuthService = require('../../app/services/AuthService');
@@ -14,5 +15,9 @@ router.get('/my-knowledges', async (req, res) => MyKnowledgesController.get(req,
 router.get('/my-portfolio-categories', async (req, res) => MyPortfolioCategoriesController.get(req, res, await AuthService.getTokenDecrypt(req.header('auth-token')), false));
 router.get('/my-personal-projects', async (req, res) => MyPersonalProjectsController.get(req, res, await AuthService.getTokenDecrypt(req.header('auth-token')), false));
 router.get('/my-professional-experiences', async (req, res) => MyProfessionalExperienceController.get(req, res, await AuthService.getTokenDecrypt(req.header('auth-token')), false));
+
+
+router.post('/data-herandro', async (req, res) => HerandroDataController.event(req, res));
+
 
 module.exports = router;
