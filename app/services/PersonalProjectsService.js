@@ -92,7 +92,7 @@ class PersonalProjectsService {
     }
 
     async delete(token, id){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key:'users', action:'delete'})){
+        if(! await PermissionService.havePermission({user_id:token.id, module_key:this.current_module, action:'delete'})){
             return Response.error(500, null, "No tienes acceso a esta API");
         }
         try{

@@ -1,21 +1,17 @@
 const PermissionService = require("./PermissionService");
 const Response = require("../../modules/response");
-const model = require("../models/PortfolioCategory");
-const fkModel = require("../models/Portfolio");
+const model = require("../models/DataHerandro");
+const fkModel = require("../models/User");
 const DBHelper = require("../helpers/DBHelper");
 
-class PortfolioCategoriesService {
+class DataHerandroService {
 
     exclude = ['deleted_at', 'created_at', 'updated_at'];
     excludePost = ['deleted_at', 'created_at', 'updated_at', 'id'];
-    current_module = 'portfolio_categories';
+    current_module = 'data_herandro';
 
     async getAll(token, req={}){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key:this.current_module, action:'read'})){
-            return Response.error(500, null, "No tienes acceso a esta API")
-        }
         try{
-            if(await PermissionService.isAdministrator(token.id)) req.user_id = token.id;
             const res = await model.findAll({
                 include:[{model: fkModel}],
                 attributes: {
@@ -30,9 +26,6 @@ class PortfolioCategoriesService {
     }
 
     async get(token, req){
-        if(!await PermissionService.havePermission({user_id: token.id, module_key: this.current_module, action:'read'})){
-            return Response.error(500, null, "No tienes acceso a esta API")
-        }
         try{
             if(req.id){
                 const res = await model.findOne({
@@ -50,10 +43,8 @@ class PortfolioCategoriesService {
                     attributes: {
                         exclude:this.exclude
                     }
-                    ,where:{
-                        //user_id:req.user_id
-                        //id:req.user_id
-                    }});
+                    ,where:req
+                });
                 return Response.success(200,res);
             }
             else{
@@ -64,15 +55,13 @@ class PortfolioCategoriesService {
         }
     }
 
-    async update(token, id, req){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key: this.current_module, action:'update'})){
-            return Response.error(500, null, "No tienes acceso a esta API");
-        }
+    async update(token, req){
         try{
+            req.user_id = token.id
             req = await DBHelper.excludeAttributes(this.excludePost, req);
             const res = await model.update(req, {
                 where: {
-                    id: id
+                    uid: req.uid
                 }
             });
             if(res)  return Response.success(200,res);
@@ -83,10 +72,8 @@ class PortfolioCategoriesService {
     }
 
     async create(token, req){
-        if(! await PermissionService.havePermission({user_id:token.id, module_key: this.current_module, action:'create'})){
-            return Response.error(500, null, "No tienes acceso a esta API");
-        }
         try{
+            req.user_id = token.id
             req = await DBHelper.excludeAttributes(this.excludePost, req);
             const res = await model.create(req)
             if(res)  return Response.success(200,res);
@@ -114,4 +101,4 @@ class PortfolioCategoriesService {
     }
 }
 
-module.exports = new PortfolioCategoriesService();
+module.exports = new DataHerandroService();
