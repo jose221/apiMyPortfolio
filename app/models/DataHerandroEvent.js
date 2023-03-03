@@ -11,6 +11,10 @@ DataHerandroEvent.init(
             autoIncrement: true,
             primaryKey: true
         },
+        eventCode: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
         name: {
             type: DataTypes.STRING(255),
             allowNull: true
@@ -19,9 +23,10 @@ DataHerandroEvent.init(
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        description: {
-            type: DataTypes.STRING(255),
-            allowNull: true
+        n_repeat: {
+            type: DataTypes.NUMBER,
+            allowNull: true,
+            default:1
         }
     },
     {

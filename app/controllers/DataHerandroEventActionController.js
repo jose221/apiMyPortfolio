@@ -8,14 +8,14 @@ const MyContactsService = require("../services/MyContactsService");
 
 class DataHerandroEventActionController {
     paramsCreate = Joi.object({
-        name: Joi.string().max(255).required(),
+        label: Joi.string().max(255).required(),
         value: Joi.string().required(),
         user_id: Joi.number(),
         data_herandro_event_id: Joi.number()
     });
 
     paramsUpdate = Joi.object({
-        name: Joi.string().max(255),
+        label: Joi.string().max(255),
         value: Joi.string().max(255),
         user_id: Joi.number(),
         data_herandro_event_id: Joi.number()

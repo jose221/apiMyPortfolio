@@ -9,12 +9,16 @@ const MyContactsService = require("../services/MyContactsService");
 class DataHerandroEventController {
     paramsCreate = Joi.object({
         name: Joi.string().max(255).required(),
-        description: Joi.string().max(255).required()
+        description: Joi.string().max(255).required(),
+        eventCode: Joi.string(),
+        n_repeat: Joi.number()
     });
 
     paramsUpdate = Joi.object({
         name: Joi.string().max(255),
-        description: Joi.string().max(255)
+        description: Joi.string().max(255),
+        eventCode: Joi.string(),
+        n_repeat: Joi.number()
     });
 
     async get(req, res, token, isAdmin=true){

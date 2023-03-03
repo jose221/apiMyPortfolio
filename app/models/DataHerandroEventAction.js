@@ -16,7 +16,7 @@ DataHerandroEventAction.init(
             type: DataTypes.STRING(),
             allowNull: true
         },
-        name: {
+        label: {
             type: DataTypes.STRING(255),
             allowNull: true
         }
