@@ -16,6 +16,8 @@ const APIMessages = require('./routes/api-messages');
 const APIModules = require('./routes/api-modules');
 const APIPermissions = require('./routes/api-permissions');
 const ApiHistoryCV = require('./routes/api-history-cv');
+const DataHerandroEvent = require('./routes/api-data-herandro-event');
+const DataHerandroEventAction = require('./routes/api-data-herandro-event-action');
 
 
 const cors = require('cors');
@@ -71,6 +73,8 @@ app.use(PREFIX_ROUTE,validateTokenAdmin, APIMessages);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIModules);
 app.use(PREFIX_ROUTE,validateTokenAdmin, APIPermissions);
 app.use(PREFIX_ROUTE,validateTokenAdmin, ApiHistoryCV);
+app.use(PREFIX_ROUTE,validateTokenAdmin, DataHerandroEvent);
+app.use(PREFIX_ROUTE,validateTokenAdmin, DataHerandroEventAction);
 
 /******* upload file *****************/
 /******* upload file *****************/
