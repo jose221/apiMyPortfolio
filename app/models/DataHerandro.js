@@ -22,6 +22,10 @@ DataHerandro.init(
         domain: {
             type: DataTypes.STRING(255),
             allowNull: true
+        },
+        path: {
+            type: DataTypes.STRING(255),
+            allowNull: true
         }
     },
     {

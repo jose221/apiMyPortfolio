@@ -659,6 +659,7 @@ CREATE TABLE IF NOT EXISTS `data_herandro` (
     `uid` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
     `ip` varchar(150) COLLATE utf8_unicode_ci DEFAULT NULL,
     `domain` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
     `created_at` timestamp NULL DEFAULT NULL,
     `updated_at` timestamp NULL DEFAULT NULL,
     `deleted_at` timestamp NULL DEFAULT NULL,
@@ -668,12 +669,13 @@ CREATE TABLE IF NOT EXISTS `data_herandro` (
     CONSTRAINT `FK_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
     ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='tabla de data_herandro';
 
--- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `data_herandro` DISABLE KEYS */;
-INSERT INTO `data_herandro` (`id`, `uid`, `ip`, `domain`, `created_at`, `updated_at`, `deleted_at`, `user_id`) VALUES
-                                                                                                                   (7, '039a00c1-6cfd-4367-8903-e2c44bd6a461', '::1', 'portfolio-design.test', '2023-03-01 23:36:41', '2023-03-01 23:36:41', NULL, 1),
-                                                                                                                   (8, 'b64523b1-9f91-45a8-90f9-49dd9fb8dffb', '::1', 'portfolio-design.test', '2023-03-01 23:37:01', '2023-03-01 23:37:01', NULL, 1),
-                                                                                                                   (9, 'a790e109-ee2b-4b57-a19c-79c1bbf70e55', '::1', 'portfolio-design.test', '2023-03-01 23:39:29', '2023-03-01 23:39:29', NULL, 1);
+INSERT INTO `data_herandro` (`id`, `uid`, `ip`, `domain`, `path`, `created_at`, `updated_at`, `deleted_at`, `user_id`) VALUES
+                                                                                                                           (7, '039a00c1-6cfd-4367-8903-e2c44bd6a461', '::1', 'portfolio-design.test', NULL, '2023-03-01 23:36:41', '2023-03-01 23:36:41', NULL, 1),
+                                                                                                                           (8, 'b64523b1-9f91-45a8-90f9-49dd9fb8dffb', '::1', 'portfolio-design.test', NULL, '2023-03-01 23:37:01', '2023-03-01 23:37:01', NULL, 1),
+                                                                                                                           (9, 'a790e109-ee2b-4b57-a19c-79c1bbf70e55', '::1', 'portfolio-design.test', NULL, '2023-03-01 23:39:29', '2023-03-01 23:39:29', NULL, 1);
+
 /*!40000 ALTER TABLE `data_herandro` ENABLE KEYS */;
 
 -- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro_event
