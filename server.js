@@ -1,6 +1,9 @@
 var express = require('express');
 require('express-group-routes');
 const bodyparser = require('body-parser');
+
+const requestIp = require('request-ip')
+
 const APIAuth = require('./routes/api-auth');
 const APIUser = require('./routes/api-user');
 const APIProfessionaleExperience = require('./routes/api-professional-experience');
@@ -25,7 +28,6 @@ const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
 var app = express();
 var ws = require('express-ws')(app);
 var multipart = require('connect-multiparty');
-
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.set('trust proxy', true);

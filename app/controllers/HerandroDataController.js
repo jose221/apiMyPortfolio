@@ -19,7 +19,8 @@ class HerandroDataController {
     }
 
     async event(req, res){
-        var ip = req.connection?.remoteAddress || "anonimo";
+        //var ip = req.connection?.remoteAddress || "anonimo";
+        var ip = req.clientIp || "anonimo";
         req.body.ip = ip;
         let resService = {}
         let item = req.body;
