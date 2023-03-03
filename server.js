@@ -2,8 +2,6 @@ var express = require('express');
 require('express-group-routes');
 const bodyparser = require('body-parser');
 
-const requestIp = require('request-ip')
-
 const APIAuth = require('./routes/api-auth');
 const APIUser = require('./routes/api-user');
 const APIProfessionaleExperience = require('./routes/api-professional-experience');

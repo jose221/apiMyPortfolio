@@ -4,23 +4,26 @@ const Service = require("../services/DataHerandroService");
 const AuthService = require('../services/AuthService');
 const DataHerandroEventService = require('../services/DataHerandroEventService');
 const DataHerandroEventActionService = require('../services/DataHerandroEventActionService');
+const requestIp = require('request-ip');
 class HerandroDataController {
     init(socket, req={}, data ={}){
-        var ip = req.connection?.remoteAddress || "anonimo";
+        //var ip = req.connection?.remoteAddress || "anonimo";
+        var ip = requestIp.getClientIp(req) || "anonimo";
 
         data.id = uuidv4()
         socket.send(JSON.stringify({...data, ip:ip}));
     }
 
     action(socket, req={}, data ={}){
-        var ip = req.connection?.remoteAddress || "anonimo";
+        //var ip = req.connection?.remoteAddress || "anonimo";
+        var ip = requestIp.getClientIp(req) || "anonimo";
 
         socket.send(JSON.stringify({...data, ip:ip}));
     }
 
     async event(req, res){
         //var ip = req.connection?.remoteAddress || "anonimo";
-        var ip = req.clientIp || "anonimo";
+        var ip = requestIp.getClientIp(req) || "anonimo";
         req.body.ip = ip;
         let resService = {}
         let item = req.body;
