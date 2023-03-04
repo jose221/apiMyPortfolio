@@ -4,7 +4,7 @@ const Service = require("../services/DataHerandroService");
 const AuthService = require('../services/AuthService');
 const DataHerandroEventService = require('../services/DataHerandroEventService');
 const DataHerandroEventActionService = require('../services/DataHerandroEventActionService');
-const requestIp = require('request-ip');
+const requestIp = require("request-ip");
 class HerandroDataController {
     init(socket, req={}, data ={}){
         //var ip = req.connection?.remoteAddress || "anonimo";
