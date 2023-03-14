@@ -20,7 +20,9 @@ class HerandroDataController {
 
         socket.send(JSON.stringify({...data, ip:ip}));
     }
+    async EventAction(req, res){
 
+    }
     async event(req, res){
         //var ip = req.connection?.remoteAddress || "anonimo";
         var ip = requestIp.getClientIp(req) || "anonimo";
@@ -38,8 +40,9 @@ class HerandroDataController {
             }
 
             if(itemEventAction.length){
+                item = itemEventAction[itemEventAction.length -1];
                 let dataHerandro = await Service.get(user, {uid:req.body.uid, user_id: user.id});
-                itemEventAction.forEach(async (item) => {
+                if(item){
                     let dataHerandroEvent = await DataHerandroEventService.getAll(user, {user_id: user.id, eventCode:item.eventCode});
                     if(dataHerandroEvent.data.length){
                         let dataHerandroEventAction = await DataHerandroEventActionService.getAll(user, {user_id: user.id,data_herandro_event_id: dataHerandroEvent.data[0].id, label:item.label });
@@ -51,7 +54,7 @@ class HerandroDataController {
                             }
                         }
                     }
-                });
+                }
             }
         }
 
