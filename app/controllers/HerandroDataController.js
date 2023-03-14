@@ -50,7 +50,7 @@ class HerandroDataController {
                             await DataHerandroEventActionService.create(user, {...item, user_id: user.id, eventCode:item.eventCode, data_herandro_event_id: dataHerandroEvent.data[0].id})
                         }else{
                             if(dataHerandroEvent.data[0].n_repeat > dataHerandroEventAction.data.length || dataHerandroEvent.data[0].n_repeat == 0){
-                                await DataHerandroEventActionService.create(user, {...item, user_id: user.id, eventCode:item.eventCode, data_herandro_event_id: dataHerandroEvent.data[0].id})
+                                await DataHerandroEventActionService.create(user, {label: item.label,value:item.value, user_id: user.id, data_herandro_event_id: dataHerandroEvent.data[0].id})
                             }
                         }
                     }
