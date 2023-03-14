@@ -38,24 +38,6 @@ class HerandroDataController {
             } else {
                 resService = await Service.update(user, item)
             }
-
-            if(itemEventAction.length){
-                item = itemEventAction[itemEventAction.length -1];
-                let dataHerandro = await Service.get(user, {uid:req.body.uid, user_id: user.id});
-                if(item){
-                    let dataHerandroEvent = await DataHerandroEventService.getAll(user, {user_id: user.id, eventCode:item.eventCode});
-                    if(dataHerandroEvent.data.length){
-                        let dataHerandroEventAction = await DataHerandroEventActionService.getAll(user, {user_id: user.id,data_herandro_event_id: dataHerandroEvent.data[0].id, label:item.label });
-                        if(!dataHerandroEventAction.data.length){
-                            await DataHerandroEventActionService.create(user, {...item, user_id: user.id, eventCode:item.eventCode, data_herandro_event_id: dataHerandroEvent.data[0].id})
-                        }else{
-                            if(dataHerandroEvent.data[0].n_repeat > dataHerandroEventAction.data.length || dataHerandroEvent.data[0].n_repeat == 0){
-                                await DataHerandroEventActionService.create(user, {label: item.label,value:item.value, user_id: user.id, data_herandro_event_id: dataHerandroEvent.data[0].id})
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         return res.status(200).json(req.body);
