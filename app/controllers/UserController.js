@@ -109,6 +109,7 @@ class UserController {
         if(req.files.logo) req.body.logo = await UploadFile.save("",req.files.logo, {module:"users", returnUrl:true, type:'image'} )
         if(req.files.slogan_es) req.body.slogan_es = await UploadFile.save("",req.files.slogan_es, {module:"users", returnUrl:true, type:'image'} )
         if(req.files.slogan_en) req.body.slogan_en = await UploadFile.save("",req.files.slogan_en, {module:"users", returnUrl:true, type:'image'} )
+        if(req.files.avatar) req.body.avatar = await UploadFile.save("",req.files.avatar, {module:"users", returnUrl:true, type:'image'} )
         try{
             if(req.params.id){
                 item = await UserService.update(token, req.params.id, req.body);
