@@ -102,5 +102,7 @@ app.ws('/test-socket', (socket, req) => {
 
 
 // iniciamos nuestro servidor
- app.listen(port)
+app.listen(port, () => {
+ console.log(`Servidor corriendo en el puerto ${port}`);
+});
 
