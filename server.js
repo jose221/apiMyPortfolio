@@ -30,7 +30,12 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.set('trust proxy', true);
 
- var port = process.env.PORT || 8080
+const port = process.env.PORT;
+
+if (!port) {
+ throw new Error("PORT no está definido. Asegúrate de que la app corre bajo Passenger en cPanel.");
+}
+
 var corsOptions = {
  origin: '*', // Reemplazar con dominio
  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
