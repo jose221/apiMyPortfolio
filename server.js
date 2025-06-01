@@ -91,6 +91,8 @@ const APIMyPortfolio = require('./routes/portfolio/api-portfolio');
 app.use(PREFIX_ROUTE_PUBLIC, APIMyPortfolio);
 
 const HerandroDataController = require("./app/controllers/HerandroDataController");
+const {serve, setup} = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 app.ws('/test-socket', (socket, req) => {
  socket.on('message', (data) => {
@@ -102,6 +104,7 @@ app.ws('/test-socket', (socket, req) => {
   }
  });
 });
+app.use('/swagger', serve, setup(swaggerSpec));
 
 app.listen(port, () => {
  fs.appendFileSync('boot.log', `[${new Date().toISOString()}] Servidor escuchando en puerto ${port}\n`);
