@@ -22,6 +22,7 @@ const APIPermissions = require('./routes/api-permissions');
 const ApiHistoryCV = require('./routes/api-history-cv');
 const DataHerandroEvent = require('./routes/api-data-herandro-event');
 const DataHerandroEventAction = require('./routes/api-data-herandro-event-action');
+const APITools = require('./routes/api-data-herandro-event-action');
 
 const cors = require('cors');
 const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
@@ -85,6 +86,7 @@ app.use(PREFIX_ROUTE, validateTokenAdmin, ApiHistoryCV);
 app.use(PREFIX_ROUTE, validateTokenAdmin, DataHerandroEvent);
 app.use(PREFIX_ROUTE, validateTokenAdmin, DataHerandroEventAction);
 app.use(PREFIX_ROUTE, validateTokenAdmin, APIUploadFile);
+app.use(PREFIX_ROUTE, validateTokenAdmin, APITools);
 app.use('/storage', express.static(__dirname + '/public'));
 
 const APIMyPortfolio = require('./routes/portfolio/api-portfolio');
