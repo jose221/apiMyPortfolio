@@ -108,6 +108,13 @@ app.ws('/test-socket', (socket, req) => {
 });
 app.use('/swagger', serve, setup(swaggerSpec));
 
+// Ruta para servir el archivo swagger.json
+app.get('/swagger.json', (req, res) => {
+ res.setHeader('Content-Type', 'application/json');
+ res.send(swaggerSpec);
+});
+
+
 app.listen(port, () => {
  fs.appendFileSync('boot.log', `[${new Date().toISOString()}] Servidor escuchando en puerto ${port}\n`);
  console.log(`Servidor corriendo en el puerto ${port}`);
