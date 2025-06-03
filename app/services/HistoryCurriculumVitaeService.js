@@ -4,7 +4,7 @@ const model = require("../models/HistoryCurriculumVitae");
 const DBHelper = require("../helpers/DBHelper");
 const fkModel = require("../models/User");
 
-class StudiesService {
+class HistoryCurriculumVitaeService {
 
     exclude = ['deleted_at', 'created_at', 'updated_at'];
     excludePost = ['deleted_at', 'created_at', 'updated_at', 'id'];
@@ -101,4 +101,4 @@ class StudiesService {
     }
 }
 
-module.exports = new StudiesService();
+module.exports = new HistoryCurriculumVitaeService();
