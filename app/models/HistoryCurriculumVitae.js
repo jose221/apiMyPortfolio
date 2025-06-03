@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const  db = require('../../modules/db')
-const User = require('./User');
+const User = require('./User')
 
 
 class HistoryCurriculumVitae extends Model{}
@@ -23,6 +23,10 @@ HistoryCurriculumVitae.init(
             type: DataTypes.STRING(255),
             allowNull: true
         },
+        user_id: { // <--- importante para la vinculación
+            type: DataTypes.BIGINT,
+            allowNull: false
+        },
     },
     {
         modelName: 'HistoryCurriculumVitae',
@@ -31,5 +35,6 @@ HistoryCurriculumVitae.init(
         updatedAt: 'updated_at',
         createdAt: 'created_at',
     });
+
 module.exports = HistoryCurriculumVitae;
 
