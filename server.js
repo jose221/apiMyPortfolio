@@ -1,6 +1,35 @@
 const fs = require('fs');
 fs.appendFileSync('boot.log', `[${new Date().toISOString()}] Iniciando aplicación Node.js...\n`);
 
+// Función para obtener la hora local de Cancún en ISO-like
+const getCancunTime = () => {
+ return new Date().toLocaleString('sv-SE', {
+  timeZone: 'America/Cancun',
+  hour12: false
+ }).replace(' ', 'T') + ':00';
+};
+
+// Función para convertir fecha legible en español (ej. "07 de junio de 2025")
+const getCancunDateFormatted = () => {
+ return new Date().toLocaleString('es-MX', {
+  timeZone: 'America/Cancun',
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true
+ });
+};
+
+// Crear archivo build-info.json
+const buildInfo = {
+ version: '1.0.0',
+ deployedAt: getCancunTime(),
+ deployedAtToString: getCancunDateFormatted()
+};
+fs.writeFileSync('build-info.json', JSON.stringify(buildInfo, null, 2));
+
 const express = require('express');
 require('express-group-routes');
 const bodyparser = require('body-parser');
@@ -30,6 +59,8 @@ const multipart = require('connect-multiparty');
 
 const app = express();
 const ws = require('express-ws')(app);
+const LoggerModule = require("./modules/logger");
+let _logger  = new LoggerModule();
 
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
@@ -47,7 +78,21 @@ app.use(cors({ origin: '*', optionsSuccessStatus: 200 }));
 app.use(multipart());
 
 app.get('/', (req, res) => {
- res.json({ mensaje: '¡Hola Mundo!' });
+ try {
+  const info = JSON.parse(fs.readFileSync('build-info.json'));
+  res.set('Cache-Control', 'no-store');
+  res.json({
+   mensaje: '¡Hola Mundo!',
+   version: info.version,
+   deployedAt: info.deployedAt,
+   deployedAtToString: info.deployedAtToString
+  });
+ } catch (err) {
+  res.status(500).json({
+   mensaje: '¡Hola Mundo!',
+   error: 'No se pudo leer la información de versión'
+  });
+ }
 });
 
 app.get('/test', async (req, res) => {
@@ -62,6 +107,7 @@ app.get('/test', async (req, res) => {
   await connection.authenticate();
   res.json({ mensaje: 'Connection has been established successfully.' });
  } catch (e) {
+  _logger.logError("database", e)
   res.json({ mensaje: 'Unable to connect to the database:', error: e.message });
  }
 });
@@ -113,7 +159,6 @@ app.get('/swagger.json', (req, res) => {
  res.setHeader('Content-Type', 'application/json');
  res.send(swaggerSpec);
 });
-
 
 app.listen(port, () => {
  fs.appendFileSync('boot.log', `[${new Date().toISOString()}] Servidor escuchando en puerto ${port}\n`);
