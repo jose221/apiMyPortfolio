@@ -13,12 +13,13 @@ class ToolController {
 
     async correctorText(req, res, token){
         let item = null;
+        const params = req.query ?? req.params ?? req.body;
         try{
-            const {error} = this.paramsCorrectorText.validate(req.params);
+            const {error} = this.paramsCorrectorText.validate(params);
             if (error) {
                 return res.status(400).json(Response.error(400, error.details, error.details[0].message))
             }
-            item = await toolService.correctorText(token, req.params);
+            item = await toolService.correctorText(token, params);
 
             return res.status(200).json(item);
         }catch (e) {
@@ -28,12 +29,13 @@ class ToolController {
 
     async translate(req, res, token){
         let item = null;
+        const params = req.query ?? req.params ?? req.body;
         try{
-            const {error} = this.paramsTranslate.validate(req.params);
+            const {error} = this.paramsTranslate.validate(params);
             if (error) {
                 return res.status(400).json(Response.error(400, error.details, error.details[0].message))
             }
-            item = await toolService.translate(token, req.params);
+            item = await toolService.translate(token, params);
 
             return res.status(200).json(item);
         }catch (e) {

@@ -20,7 +20,7 @@ class HerandroServicesAPI {
 
     async translate(language, text){
         return await this.axiosInstance.get('/translate', {
-            params: { text, language }
+            params: { text: text, language: language }
         });
     }
 

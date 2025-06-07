@@ -10,7 +10,7 @@ class ToolService {
                 return Response.error(500, null, "No tienes acceso a esta API");
             }
             const response = await herandroAPI.translate(params.language, params.text);
-            return Response.success(200,response?.data ?? {});
+            return Response.success(200,response?.data?.data ?? {});
         }catch (e) {
             return Response.error(500, e)
         }
@@ -22,7 +22,7 @@ class ToolService {
               return Response.error(500, null, "No tienes acceso a esta API");
           }
           const response = await herandroAPI.correctorText(params.text);
-          return Response.success(200,response?.data ?? {});
+          return Response.success(200,response?.data?.data ?? {});
         }catch (e){
             return Response.error(500, e)
         }

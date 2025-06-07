@@ -22,7 +22,7 @@ const APIPermissions = require('./routes/api-permissions');
 const ApiHistoryCV = require('./routes/api-history-cv');
 const DataHerandroEvent = require('./routes/api-data-herandro-event');
 const DataHerandroEventAction = require('./routes/api-data-herandro-event-action');
-const APITools = require('./routes/api-data-herandro-event-action');
+const APITools = require('./routes/api-tools');
 
 const cors = require('cors');
 const validateTokenAdmin = require('./app/middlewares/validateTokenAdmin');
