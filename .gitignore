@@ -1,3 +1,5 @@
 /.idea
 /.env
 boot.log
+node_modules
+logs
