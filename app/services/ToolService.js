@@ -12,7 +12,7 @@ class ToolService {
             const response = await herandroAPI.translate(params.language, params.text);
             return Response.success(200,response?.data?.data ?? {});
         }catch (e) {
-            return Response.error(500, e)
+            return Response.error(500, e, params)
         }
     }
 
@@ -24,7 +24,7 @@ class ToolService {
           const response = await herandroAPI.correctorText(params.text);
           return Response.success(200,response?.data?.data ?? {});
         }catch (e){
-            return Response.error(500, e)
+            return Response.error(500, e, params)
         }
     }
 

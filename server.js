@@ -24,7 +24,7 @@ const getCancunDateFormatted = () => {
 
 // Crear archivo build-info.json
 const buildInfo = {
- version: '1.0.0',
+ version: '1.0.1',
  deployedAt: getCancunTime(),
  deployedAtToString: getCancunDateFormatted()
 };
