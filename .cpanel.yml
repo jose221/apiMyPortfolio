@@ -1,0 +1,8 @@
+deployment:
+  tasks:
+    - export NODE_ENV=production
+    - cd /home/herapiqz/apiMyPortfolio
+    - /home/herapiqz/nodevenv/apiMyPortfolio/22/bin/npm install --omit=dev
+    - mkdir -p tmp
+    - touch tmp/restart.txt
+    - echo "Deploy completado: $(date)" >> deploy.log
