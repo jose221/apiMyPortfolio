@@ -9,7 +9,7 @@ const getCancunTime = () => {
  }).replace(' ', 'T') + ':00';
 };
 
-// Función para convertir fecha legible en español (ej. "07 de junio de 2025")
+// Función para convertir fecha legible en español (ej. "07 de junio de 2025, 01:17 p. m.")
 const getCancunDateFormatted = () => {
  return new Date().toLocaleString('es-MX', {
   timeZone: 'America/Cancun',
@@ -24,7 +24,7 @@ const getCancunDateFormatted = () => {
 
 // Crear archivo build-info.json
 const buildInfo = {
- version: '1.0.6',
+ version: '1.0.7',
  deployedAt: getCancunTime(),
  deployedAtToString: getCancunDateFormatted()
 };
@@ -60,7 +60,7 @@ const multipart = require('connect-multiparty');
 const app = express();
 const ws = require('express-ws')(app);
 const LoggerModule = require("./modules/logger");
-let _logger  = new LoggerModule();
+let _logger = new LoggerModule();
 
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
@@ -139,7 +139,7 @@ const APIMyPortfolio = require('./routes/portfolio/api-portfolio');
 app.use(PREFIX_ROUTE_PUBLIC, APIMyPortfolio);
 
 const HerandroDataController = require("./app/controllers/HerandroDataController");
-const {serve, setup} = require("swagger-ui-express");
+const { serve, setup } = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
 app.ws('/test-socket', (socket, req) => {
@@ -159,6 +159,16 @@ app.get('/swagger.json', (req, res) => {
  res.setHeader('Content-Type', 'application/json');
  res.send(swaggerSpec);
 });
+
+// Tocar restart.txt para forzar reinicio (Passenger)
+try {
+ const restartPath = `${__dirname}/tmp/restart.txt`;
+ fs.mkdirSync(`${__dirname}/tmp`, { recursive: true });
+ fs.writeFileSync(restartPath, `Reinicio solicitado: ${new Date().toISOString()}\n`);
+ fs.appendFileSync('boot.log', `[${new Date().toISOString()}] Archivo restart.txt actualizado.\n`);
+} catch (e) {
+ fs.appendFileSync('boot.log', `[${new Date().toISOString()}] ERROR al tocar restart.txt: ${e.message}\n`);
+}
 
 app.listen(port, () => {
  fs.appendFileSync('boot.log', `[${new Date().toISOString()}] Servidor escuchando en puerto ${port}\n`);
