@@ -5,22 +5,15 @@ class Logger {
   constructor() {
     this.logsDir = path.join(process.cwd(), 'logs');
     this.ensureLogsDirectoryExists();
+    this.timeZone = 'America/Cancun';
   }
 
-  /**
-   * Ensures that the logs directory exists
-   */
   ensureLogsDirectoryExists() {
     if (!fs.existsSync(this.logsDir)) {
       fs.mkdirSync(this.logsDir, { recursive: true });
     }
   }
 
-  /**
-   * Ensures that the controller-specific log directory exists
-   * @param {string} controllerName - Name of the controller
-   * @returns {string} - Path to the controller log directory
-   */
   ensureControllerLogDirectoryExists(controllerName) {
     const controllerLogDir = path.join(this.logsDir, controllerName);
     if (!fs.existsSync(controllerLogDir)) {
@@ -29,19 +22,39 @@ class Logger {
     return controllerLogDir;
   }
 
-  /**
-   * Logs an error to a file
-   * @param {string} controllerName - Name of the controller
-   * @param {string} methodName - Name of the method
-   * @param {Error} error - Error object
-   * @param {Object} additionalInfo - Additional information to log
-   */
+  // Timestamp en hora de Cancún y formato ISO-like
+  getTimestamp() {
+    const date = new Date();
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3,
+      hour12: false,
+      timeZone: this.timeZone
+    };
+    const parts = new Intl.DateTimeFormat('sv-SE', options).formatToParts(date);
+
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+    const day = parts.find(p => p.type === 'day').value;
+    const hour = parts.find(p => p.type === 'hour').value;
+    const minute = parts.find(p => p.type === 'minute').value;
+    const second = parts.find(p => p.type === 'second').value;
+    const fraction = parts.find(p => p.type === 'fraction')?.value ?? '000';
+
+    return `${year}-${month}-${day}T${hour}:${minute}:${second}.${fraction}-05:00`; // GMT-5 fijo
+  }
+
   logError(controllerName, methodName, error, additionalInfo = {}) {
     try {
       const controllerLogDir = this.ensureControllerLogDirectoryExists(controllerName);
       const logFile = path.join(controllerLogDir, 'errors.log');
       
-      const timestamp = new Date().toISOString();
+      const timestamp = this.getTimestamp();
       const errorMessage = error instanceof Error ? error.message : String(error);
       const errorStack = error instanceof Error ? error.stack : '';
       
@@ -55,28 +68,19 @@ class Logger {
       };
       
       const logString = JSON.stringify(logEntry, null, 2);
-      
       fs.appendFileSync(logFile, logString + '\n\n');
-      
       console.log(`Error logged to ${logFile}`);
     } catch (logError) {
       console.error('Failed to log error:', logError);
     }
   }
 
-  /**
-   * Logs information to a file
-   * @param {string} controllerName - Name of the controller
-   * @param {string} methodName - Name of the method
-   * @param {string} message - Message to log
-   * @param {Object} additionalInfo - Additional information to log
-   */
   logInfo(controllerName, methodName, message, additionalInfo = {}) {
     try {
       const controllerLogDir = this.ensureControllerLogDirectoryExists(controllerName);
       const logFile = path.join(controllerLogDir, 'info.log');
       
-      const timestamp = new Date().toISOString();
+      const timestamp = this.getTimestamp();
       
       const logEntry = {
         timestamp,
@@ -87,7 +91,6 @@ class Logger {
       };
       
       const logString = JSON.stringify(logEntry, null, 2);
-      
       fs.appendFileSync(logFile, logString + '\n\n');
     } catch (logError) {
       console.error('Failed to log info:', logError);
