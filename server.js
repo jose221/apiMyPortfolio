@@ -24,7 +24,7 @@ const getCancunDateFormatted = () => {
 
 // Crear archivo build-info.json
 const buildInfo = {
- version: '1.0.3',
+ version: '1.0.6',
  deployedAt: getCancunTime(),
  deployedAtToString: getCancunDateFormatted()
 };
@@ -82,7 +82,7 @@ app.get('/', (req, res) => {
   const info = JSON.parse(fs.readFileSync('build-info.json'));
   res.set('Cache-Control', 'no-store');
   res.json({
-   mensaje: '¡Hola Mundo!',
+   mensaje: 'API Rest Full',
    version: info.version,
    deployedAt: info.deployedAt,
    deployedAtToString: info.deployedAtToString
