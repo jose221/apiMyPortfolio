@@ -24,7 +24,7 @@ const getCancunDateFormatted = () => {
 
 // Crear archivo build-info.json
 const buildInfo = {
- version: '1.0.9',
+ version: '1.0.10',
  deployedAt: getCancunTime(),
  deployedAtToString: getCancunDateFormatted()
 };
@@ -49,6 +49,7 @@ const APIMessages = require('./routes/api-messages');
 const APIModules = require('./routes/api-modules');
 const APIPermissions = require('./routes/api-permissions');
 const ApiHistoryCV = require('./routes/api-history-cv');
+const ApiRoles = require('./routes/api-roles');
 const DataHerandroEvent = require('./routes/api-data-herandro-event');
 const DataHerandroEventAction = require('./routes/api-data-herandro-event-action');
 const APITools = require('./routes/api-tools');
@@ -133,7 +134,9 @@ app.use(PREFIX_ROUTE, validateTokenAdmin, DataHerandroEvent);
 app.use(PREFIX_ROUTE, validateTokenAdmin, DataHerandroEventAction);
 app.use(PREFIX_ROUTE, validateTokenAdmin, APIUploadFile);
 app.use(PREFIX_ROUTE, validateTokenAdmin, APITools);
+app.use(PREFIX_ROUTE, validateTokenAdmin, ApiRoles);
 app.use('/storage', express.static(__dirname + '/public'));
+app.use('/logs', express.static(__dirname + '/public/logs'));
 
 const APIMyPortfolio = require('./routes/portfolio/api-portfolio');
 app.use(PREFIX_ROUTE_PUBLIC, APIMyPortfolio);
