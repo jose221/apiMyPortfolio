@@ -120,4 +120,38 @@ router.delete(`${path}/:id`, async (req, res) => Controller.delete(req, res, awa
  */
 router.post(`${path}/delete`, async (req, res) => Controller.delete(req, res, await AuthService.getTokenDecrypt(req.header('auth-token'))));
 
+
+/**
+ * @swagger
+ * /modules/by-role:
+ *   get:
+ *     summary: Obtiene los módulos asignados al rol del usuario autenticado
+ *     tags:
+ *       - modules
+ *     description: Retorna una lista de módulos accesibles según el rol del usuario que realiza la petición. Se requiere autenticación mediante el token enviado en el header `auth-token`.
+ *     security:
+ *       - auth-token: []
+ *     responses:
+ *       200:
+ *         description: Lista de módulos accesibles por el rol.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: ID del módulo
+ *                   nombre:
+ *                     type: string
+ *                     description: Nombre del módulo
+ *                   descripcion:
+ *                     type: string
+ *                     description: Descripción del módulo
+ *       401:
+ *         description: Token de autenticación inválido o ausente
+ */
+router.get(`${path}/by-role`, async (req, res) => Controller.getByRole(req, res, await AuthService.getTokenDecrypt(req.header('auth-token'))));
 module.exports = router;
